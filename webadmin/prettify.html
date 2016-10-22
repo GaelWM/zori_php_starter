@@ -1,0 +1,39 @@
+//process
+      if(!is_null($this->ContentLeft)){
+         $CONTENTLEFT = "
+         <td align='left' valign='top' id='tdContentLeft'>
+            <div class='panel panel-default pull-left'>
+                <div class='panel-body'>
+                    $this->ContentLeft
+                </div>
+            </div>
+         </td>";
+      }elseif (!is_null($this->ContentRight)) {
+         $CONTENTRIGHT = "
+         <td align='left' valign='top' id='tdContentRight'>
+            <div class='panel panel-default pull-right'>
+                <div class='panel-body'>
+                    $this->ContentRight
+                </div>
+            </div>
+         </td>";
+      }elseif (!is_null($this->Content)) {
+         $CONTENT = "
+         <td colspan='100%' style='background: transparent; padding: 0px;'>
+            <div class='panel panel-default'>
+               <div class='panel-body zoriTableDiv'>
+                  $this->Content
+               </div>
+            </div>
+         </td>";
+      }
+      return "
+         <table border='0' cellpadding='2' cellspacing='1' width='100%' id='tblContent'>
+            <tr>
+               $CONTENTLEFT
+               $CONTENTRIGHT
+            </tr>
+            <tr>
+               $CONTENT
+            </tr>
+         </table>";

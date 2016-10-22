@@ -1,0 +1,44 @@
+ /*		Zori starter css file 
+ 	This css class is the structure on the main page.
+ */
+body{
+	/*border: 1px dashed black;*/
+	margin:0;
+   	padding:0;
+   	height:100%;
+}
+#HEADER{
+	height: 70px;
+	border-top: 1px solid white;
+	background:#282f36;
+}
+#MENU{
+	height: 100px;
+	/*border: 1px dashed black;*/
+	width:100%;
+    background:#282f36;
+}
+
+#CONTENT{
+	/*height: 700px;*/
+	border: 1px dashed orange;
+
+}
+#CONTENT_LEFT{
+	/*float: left;*/
+}
+#FOOTER {
+	height: 40px;
+	/*border: 1px dashed green;*/
+    bottom:0;
+    width:100%;
+    background:#282f36;
+}
+#TOOLBAR{
+	height: 50px;
+	/*border: 1px dashed green;*/
+	background:#5ca391;
+}
+#infoDiv{
+	
+}

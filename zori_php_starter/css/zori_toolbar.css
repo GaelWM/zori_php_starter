@@ -1,0 +1,41 @@
+.search_box {
+    /*background:url("http://png-5.findicons.com/files/icons/980/yuuminco/256/search.png");
+    background-size:20px 20px;
+    background-repeat:no-repeat;
+    background-position: right;
+    
+    float: right;*/
+    width:180px; 
+    height:30px; 
+    padding:3px;
+    font-family: Georgia;
+    background-color: #ecf0f1;
+    margin: 10px;
+    border: none;
+    border-radius: 5px;
+    float:left; 
+}
+.toolbarButton{
+    width:60px; 
+    height:30px; 
+    float:right; 
+    padding:3px;
+    font-weight: bold;
+    font-family: Georgia;
+    background-color: #ecf0f1;
+    margin: 10px;
+    border-radius: 5px;
+}
+.toolbarExportButton{
+    width: 30px;
+    height: 30px;
+}
+.toolbarDownloadButton
+{
+    width: 30px;
+    height: 30px;
+}
+.toolbarUploadButton{
+    width: 30px;
+    height: 30px;
+}
