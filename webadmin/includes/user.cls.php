@@ -12,13 +12,14 @@ class User extends ZoriList
    {
       $this->Filters[frSearch]->tag = "input";
       $this->Filters[frSearch]->html->value = "";
-      $this->Filters[frSearch]->html->class = "controlText";
+      $this->Filters[frSearch]->html->class = "form-control input-sm";
 
+      //print_rr($this->Filters);
 
 
       $this->Filters[frStatus]->tag = "select";
       $this->Filters[frStatus]->html->value = "-1";
-      $this->Filters[frStatus]->html->class = "controlText";
+      $this->Filters[frStatus]->html->class = "form-control input-sm";
       $this->Filters[frStatus]->sql = "SELECT -1 AS ControlValue, '- All -' AS ControlText
                         UNION ALL
                         SELECT 1 AS ControlValue, 'Active' AS ControlText
@@ -30,7 +31,6 @@ class User extends ZoriList
       parent::__construct($DataKey);
    }
 
-   //print_rr ($this->Filters[frStatus]->html->value);
    public function getList()
    {
       if($this->Filters[frSearch]->html->value != "")
@@ -122,6 +122,7 @@ class User extends ZoriList
          $strFileName = str_pad($UserID, 5,"0", STR_PAD_LEFT) ."_". $_FILES["Profile:PicturePath"]["name"];
 
          $strPath = $SystemSettings[ProfileImageDirAdmin]; //$strPath = "../../profliepictures/";
+         //print_rr($strPath);
 
          $db->Fields["Profile:PicturePath"] = $strFileName;
 

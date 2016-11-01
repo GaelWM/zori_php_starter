@@ -260,9 +260,8 @@
 	         	<div class='pull-left'>
 		            <table style='margin-bottom:0px;'>
 		               <tr> 
-		                  	<td align='left'  style='border-right: 3px groove #1ab394;; padding: 40px 150px 19px 15px;'>
-		                  		<span class='text-muted'>". $this->ToolBar->Label ." 
-                              ".ZoriControl::renderControlToolbar("",$this->Buttons[btnHelp])."</span>
+		                  	<td align='left' style='border-right: 3px groove #1ab394;; padding: 40px 150px 19px 15px;'>
+		                  		<span class='text-muted'>".$this->ToolBar->Label."</span>
 		                  	</td>
 		                  	<td style='position: relative; border: 0px dashed orange; padding: 0px;'>
 		                  		". $this->ToolBar->Block . $this->renderFilters() ."
@@ -427,7 +426,12 @@
    	               {
    	                  $strFilterControls .= "</tr><tr>";
    	               }
-   	               $strFilterControls .= "<td align='right' nowrap><label for=\"$key\">". ZoriDetails::cleanColumnName($key) .":</label></td><td align='left'>". $filter->ControlHTML ."</td>";
+   	               $strFilterControls .= "
+                        <td align=''>
+                           <label for=\"$key\" class=''>$SP$SP". ZoriDetails::cleanColumnName($key) .":</label>
+                        </td>
+                        <td align=''>". $filter->ControlHTML ."</td>
+                     ";
    	               $i++;
    	            }
             	}
@@ -435,14 +439,13 @@
             	$strFilterControls .= "
                	<td rowspan=2 valign=middle align=center ></td>";
 
-   	      	//print_rr($this->Filters);
    	         return "
    	         	<table class='tblBlank' style='margin-bottom: 0px; padding-top:0px;'>
    	         		<tr>$strFilterControls</tr>
    	         	</table>
               		</td>
-               	<td nowrap><input style=' ' type=submit name='Action' id='btnFilter' class='controlButton' value='Filter'>
-                	$SP<input style=' ' type=submit name='Action' id='btnClear' class='controlButton' value='Clear'>"; //</td> ends outside in the calling function
+               	<td nowrap>$SP$SP<input style='background:#fff;' type=submit name='Action' id='btnFilter' class='btn btn-default' value='Filter'>
+                	$SP<input style='background:#fff;' type=submit name='Action' id='btnClear' class='btn btn-default' value='Clear'>"; //</td> ends outside in the calling function
          	}
       }
 
@@ -521,18 +524,16 @@
             //$span = NemoControl::renderControlToolbar($ToolbarItem->Span->tag, $ToolbarItem->Span);
              
             $toolbar .= "
-            <td > 
+            <td style='padding:3px;'> 
                $button
             </td >
             ";
          }
 
          return "
-         <table border='0' id='toolbar' class='toolbar table' style='margin-top:7px; border:0px purple dashed;'>
+         <table>
             <tr>
-               <td>
-               	$toolbar
-               </td>
+               $toolbar
             </tr>
          </table>
          ";

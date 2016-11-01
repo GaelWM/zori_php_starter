@@ -58,10 +58,14 @@ class ZoriControl
    {
       $control = self::renderAttributes($htmlControl); 
       if($htmlControl->comment != "") $comment = "<span class='textComment'>$htmlControl->comment</span>";
+      if($htmlControl->datalist != ""){ //20150317 - added datalist control type
+         $datalist = $htmlControl->datalist;         
+      }
+
       if($tag == "label") $htmlControl->innerHTML = $htmlControl->value;
       if($tag == "a") $htmlControl->innerHTML = $htmlControl->value;
 
-      return "<$tag $control >$htmlControl->innerHTML</$tag>$comment";
+      return "<$tag $control >$htmlControl->innerHTML</$tag>$datalist$comment";
    }
 
    public static function renderControlToolbar($tag = "input", $htmlControl = null, $class)
@@ -72,7 +76,7 @@ class ZoriControl
       if($tag == "label") $htmlControl->innerHTML = $htmlControl->value;
       if($tag == "a") $htmlControl->innerHTML = $htmlControl->value;
 
-      return "<$tag $control  >$htmlControl->innerHTML</$tag>$comment";
+      return "<$tag $control >$htmlControl->innerHTML</$tag>$datalist$comment";
    }
 
    public static function renderAttribute($attr, $value)
