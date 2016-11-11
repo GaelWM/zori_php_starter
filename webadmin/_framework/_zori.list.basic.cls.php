@@ -181,7 +181,7 @@ class ZoriListBasic extends Zori
       {
          $htmlAttr = ZoriControl::renderAttributes($column->Header->html);
          if($this->isSortable)
-            $strSort = "class='linkbutton2 textColour' onclick=\"window.location.href='?srtNew=$column->name&srtCurrent=".$srtArg[srtCurrent]."&srtDir=".$srtArg[srtDir]."'\"";
+            $strSort = "class='' onclick=\"window.location.href='?srtNew=$column->name&srtCurrent=".$srtArg[srtCurrent]."&srtDir=".$srtArg[srtDir]."'\"";
          $strList .= "<th $htmlAttr $strSort>$column->name</th>";
       }
       if(count($this->DataKey)>0 && $this->isSelectable == 1) $strList .= "<th width='1%' class='linkbutton2 textColour' onclick='jsToggleSelect();'>Select</th>";

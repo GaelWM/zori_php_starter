@@ -88,7 +88,7 @@ class ZoriReport extends Zori
       //$this->renderToolbar();
 
       return "
-      <div id='divToolBar'>
+      <div class='well'>
          <table class='tblBlank' style='margin: 0px;' width='100%' >
          <tr>
             <td>
@@ -104,7 +104,7 @@ class ZoriReport extends Zori
          </tr>
          </table>
       </div>
-      <div id='divToolBar' style='padding:0 2 8 2px;'>
+      <div class='well' >
          <table class='tblBlank' style='margin: 0px;'>
          <tr>
             <td>

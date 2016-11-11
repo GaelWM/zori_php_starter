@@ -100,7 +100,7 @@ class ZoriDetails extends Zori
             $this->Fields[$row->COLUMN_NAME]->Control->tag = "input";
             $this->Fields[$row->COLUMN_NAME]->Control->type = "text"; //"hidden"
             $this->Fields[$row->COLUMN_NAME]->Control->readonly = "readonly";
-            $this->Fields[$row->COLUMN_NAME]->Control->class = "controlText controlLabel";
+            $this->Fields[$row->COLUMN_NAME]->Control->class = "form-control input-sm";
             //$this->Fields[$row->COLUMN_NAME]->Control->value = "PRIMARY ID";
             continue;// next record
          }
@@ -124,7 +124,7 @@ class ZoriDetails extends Zori
                         WHERE blnActive = 1 OR `$row->REFERENCED_COLUMN_NAME` = '". $xdb->Fields[$row->COLUMN_NAME] ."'
                         ORDER BY ControlText ASC";
             $this->Fields[$row->COLUMN_NAME]->Control->tag = "select";
-            $this->Fields[$row->COLUMN_NAME]->Control->class = "controlText";
+            $this->Fields[$row->COLUMN_NAME]->Control->class = "form-control input-sm";
             $this->Fields[$row->COLUMN_NAME]->sql = $sqlDDL;
 
             $this->Fields[$row->COLUMN_NAME]->jsValidate = "
@@ -188,7 +188,7 @@ class ZoriDetails extends Zori
                //textboxswitch($row->COLUMN_NAME)
                $this->Fields[$row->COLUMN_NAME]->Control->tag = "input";
                $this->Fields[$row->COLUMN_NAME]->Control->type = "text";
-               $this->Fields[$row->COLUMN_NAME]->Control->class = "controlText";
+               $this->Fields[$row->COLUMN_NAME]->Control->class = "form-control input-sm";
                $this->Fields[$row->COLUMN_NAME]->Control->maxlength = $row->CHARACTER_MAXIMUM_LENGTH;
                $this->Fields[$row->COLUMN_NAME]->jsValidate = "
                if(trim(d('$row->COLUMN_NAME').value) == ''){
@@ -216,7 +216,7 @@ class ZoriDetails extends Zori
             case "int":
                $this->Fields[$row->COLUMN_NAME]->Control->tag = "input";
                $this->Fields[$row->COLUMN_NAME]->Control->type = "text";
-               $this->Fields[$row->COLUMN_NAME]->Control->class = "controlText controlNumeric";
+               $this->Fields[$row->COLUMN_NAME]->Control->class = "form-control input-sm";
                $this->Fields[$row->COLUMN_NAME]->Control->onblur = "removeAlpha(this);";
                $this->Fields[$row->COLUMN_NAME]->jsValidate = "
                   if( isNaN(d('$row->COLUMN_NAME').value) )

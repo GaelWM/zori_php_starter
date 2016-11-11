@@ -49,7 +49,7 @@
          $page->Fields["strPassword"]->Control->tag = "input";
          $page->Fields["strPassword"]->Control->type = "password";
          $page->Fields["strPassword"]->Control->autocomplete = "off";
-         $page->Fields["strPassword"]->Control->class = "controlText";
+         $page->Fields["strPassword"]->Control->class = "form-control input-sm";
          $page->Fields["strPassword"]->Control->onchange = "if($('#strPassword').val() != $('#strPasswordConfirm').val() && $('#strPasswordConfirm').val() != ''){ alert('Passwords do not match.');}";
          $page->Fields["strPassword"]->ControlHTML = "";
          $page->Fields["strPassword"]->ORDINAL_POSITION = $page->Fields["strEmail"]->ORDINAL_POSITION +0.1;
@@ -67,7 +67,7 @@
          $page->Fields["strPasswordMD5"]->Control->type = "hidden";
   
          $page->Fields["Profile:PicturePath"]->Control->type = "file";
-         $page->Fields["Profile:PicturePath"]->Control->class = "controlText controlFile";
+         $page->Fields["Profile:PicturePath"]->Control->class = "btn btn-default btn-file";
          $page->Fields["Profile:PicturePath"]->jsValidate = "";
 
          $profilePic = "

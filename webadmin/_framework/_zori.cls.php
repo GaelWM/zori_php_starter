@@ -428,7 +428,7 @@
    	               }
    	               $strFilterControls .= "
                         <td align=''>
-                           <label for=\"$key\" class=''>$SP$SP". ZoriDetails::cleanColumnName($key) .":</label>
+                           <label style='color:#000;' for=\"$key\" class='label'>$SP$SP". ZoriDetails::cleanColumnName($key) .":</label>
                         </td>
                         <td align=''>". $filter->ControlHTML ."</td>
                      ";
