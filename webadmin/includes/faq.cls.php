@@ -1,19 +1,20 @@
 <?php
+include_once("_framework/_zori.details.cls.php");
 include_once("_framework/_zori.list.cls.php");
 
 /*
 ALTER TABLE `tblGLAccountName` drop FOREIGN KEY `tblGLAccountName.strCompany`;
-ALTER TABLE `tblGLAccountName` ADD CONSTRAINT `tblGLAccountName.strCompany` FOREIGN KEY (`refCompanyID`) REFERENCES `tblCompany` (`CompanyID`) ON UPDATE CASCADE ON DELETE CASCADE
-
-
-
+ALTER TABLE `tblGLAccountName` ADD CONSTRAINT `tblGLAccountName.strCompany` FOREIGN KEY (`refCompanyID`) REFERENCES `tblCompany` (`CompanyID`) ON UPDATE CASCADE ON DELETE CASCADE 
 */
 
 //Additional / page specific translations
-   $_TRANSLATION["EN"]["strTitle"] = "Title";
-   $_TRANSLATION["AF"]["strTitle"] = "Titel";
-   $_TRANSLATION["EN"]["txtFAQ"] = "FAQ";
-   $_TRANSLATION["AF"]["txtFAQ"] = "FAQ";
+$_TRANSLATION["EN"]["strTitle"] = "Title";
+$_TRANSLATION["AF"]["strTitle"] = "Titel";
+$_TRANSLATION["EN"]["txtFAQ"] = "FAQ";
+$_TRANSLATION["AF"]["txtFAQ"] = "AF: FAQ";
+
+//print_rr($_SESSION);die;
+
 
 class FAQ extends ZoriList
 {
@@ -21,13 +22,33 @@ class FAQ extends ZoriList
 
    public function __construct($DataKey)
    {
-      $this->Filters[frSearch]->label = "lblSearch"; //20150310 - translating filter labels [note: can code lblSearch or just use the translations for frSearch as a default]
-      $this->Filters[frSearch]->tag = "input";
-      $this->Filters[frSearch]->html->value = "";
-      $this->Filters[frSearch]->html->class = "controlText";
+      $Language = "EN"; 
+      if(!$this->Filters){
+         $this->Filters[frSearch]->label = "lblSearch"; //20150310 - translating filter labels [note: can code lblSearch or just use the translations for frSearch as a default]
+         $this->Filters[frSearch]->tag = "input";
+         $this->Filters[frSearch]->html->value = "";
+         $this->Filters[frSearch]->html->class = "controlText";
 
+         $this->Filters[frTopic]->tag = "select";
+         $this->Filters[frTopic]->html->value = "";
+         $this->Filters[frTopic]->html->class = "comboBox";
+         $this->Filters[frTopic]->sql = "SELECT 0 AS ControlValue, '- All -' AS ControlText
+                        UNION ALL 
+                           SELECT lstTopic AS 'ControlValue', lstTopic AS 'ControlText'
+                           FROM vieFAQ_$Language
+                           WHERE blnActive = 1
+                           GROUP BY lstTopic
+                        ORDER BY ControlText";
+      }
+      
       parent::__construct($DataKey);
-   }
+
+   } 
+
+   // public function __construct(){
+
+   //    parent::__construct($DataKey);
+   // }
 
    public function getList()
    {
@@ -38,20 +59,23 @@ class FAQ extends ZoriList
          $like = "LIKE(". $this->db->qs("%".$this->Filters[frSearch]->html->value."%") .")";
          $Where .= " AND (Tags $like OR FAQ $like)";
       } 
-//tblFAQ.FAQID, tblFAQ.strTitle AS 'Title' , tblFAQ.strTags AS 'Tags', tblFAQ.strLastUser AS 'Last User', tblFAQ.dtLastEdit AS 'Last Edit'
-      $this->ListSQL("SELECT *
-                     FROM ". $_SESSION[USER]->LANGUAGE ."_vieFAQ  
-                     WHERE 1=1 $Where
-                     ORDER BY 'Order'");
+//sysFAQ.FAQID, sysFAQ.strTitle AS 'Title' , sysFAQ.strTags AS 'Tags', sysFAQ.strLastUser AS 'Last User', sysFAQ.dtLastEdit AS 'Last Edit'
+      $this->ListSQL("
+         SELECT FAQID, EN_lstTopic AS Topic, EN_strTitle AS Title, AF_strTitle AS Titel, strTags AS Tags, intOrder AS 'Order', blnActive AS Active, strLastUser AS 'Last User', dtLastEdit AS 'Last Edit'
+         FROM sysFAQ
+         WHERE 1=1 $Where
+         ORDER BY EN_lstTopic, intOrder",0);
 
 
       return $this->renderTable("FAQ List");
+
+      die;
    }
 
    public static function Save(&$FAQID, $nemo)
    {
       global $xdb, $arrSys, $TR, $SP, $HR, $PHP_SELF, $DATABASE_SETTINGS, $SystemSettings;
-      $db = new ZoriDatabase("tblFAQ", $FAQID, null, 0);
+      $db = new ZoriDatabase("sysFAQ", $FAQID, null, 0);
 
       $db->SetValues($_POST);
     
@@ -78,11 +102,12 @@ class FAQ extends ZoriList
       if(count($chkSelect) > 0){
       foreach($chkSelect as $key => $value)
       {
-         $xdb->doQuery("DELETE FROM tblFAQ WHERE FAQID = ". $xdb->qs($key));
+         $xdb->doQuery("DELETE FROM sysFAQ WHERE FAQID = ". $xdb->qs($key));
          //$xdb->doQuery("UPDATE tblGLAccountName SET blnActive = 0 WHERE GLAccountNameID = ". $xdb->qs($key));
       }
          return "Records Deleted.";
       }
    }
+   
 }
 ?>

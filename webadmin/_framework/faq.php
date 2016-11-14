@@ -36,8 +36,8 @@
       default:
 
          $page = new FAQ(array("FAQID"));
-         $page->Content = $page->getList();
-         //$page->Content = "Work in progress";
+         //$page->Content = $page->getList();
+         $page->Content = "Work in progress";
          break;
    }
 
