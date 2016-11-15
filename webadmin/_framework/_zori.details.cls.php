@@ -314,9 +314,6 @@ class ZoriDetails extends Zori
          }//eoSwitch
 
       }
-      //post
-      //print_rr($this->Fields); 
-      //die;
 
       mysqli_select_db($db, $currentDB);
       $this->renderControls();
