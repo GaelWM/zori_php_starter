@@ -1,13 +1,12 @@
 <?php
 	/**
-	* By Gael Musikingala 20160919
+	* By Gael Musikingala 20160919 //20161115 -- GAEL [Code Reviewed]
 	*/
 	include_once ("systems.php");
 	include_once ("_framework/_zori.control.cls.php");
 
 	class ZoriBasic
 	{
-		
 		private $HEADER;
 		public $Content;
 		private $FOOTER;
@@ -17,7 +16,9 @@
 		public $SystemSettings = array();
 		public $Message;
 
-		function __construct(){
+		function __construct()
+      {
+         //ini
 			global $SystemSettings;
 
       		$this->SystemSettings = $SystemSettings;
@@ -45,7 +46,7 @@
 			global $SystemSettings;
 
 			$this->HEADER =
-			"	
+			"
 				<nav class='navbar-default pull-left'>
 					<button type='button' class='navbar-toggle collapsed' data-toggle='offcanvas' data-target='#sidenav' aria-expanded='false'>
 			        <span class='sr-only'>Toggle navigation</span>
@@ -106,7 +107,6 @@
    	{
    		$JS ="
          <script>
-
             var interval;
             var codetmpl = '<code>%codeobj%</code><br><code>%codestr%</code>';
             var message = '".$this->Message->Text."';

@@ -1,10 +1,10 @@
 <?php
 	/**
-	* By Gael Musikingala 20160919
+	* By Gael Musikingala 20160919 //20161115 -- GAEL [Code Reviewed]
 	*/
 	include_once ("systems.php");
    include_once("_framework/_zori.basic.cls.php");
-	@include_once("_framework/_zori.menu.cls.php");
+	include_once("_framework/_zori.menu.cls.php");
 
 	class Zori extends ZoriBasic
 	{
@@ -23,11 +23,13 @@
 
       protected $Buttons = array();
 
-		function __construct($title=""){
+		function __construct($title="")
+      {
+         //ini
          global $SystemSettings;
+
          parent::__construct();
 
-         
          // SETTING THE TITLE OF THE PAGE gael 20161004
          foreach ($SystemSettings as $key => $value) {
             $this->SystemSettings[$key] = $value;
@@ -41,7 +43,6 @@
 
    	   $this->setDB();
    	   
-         
 		   $this->iniSecurity(); //must be after $_SESSION load
       	$this->iniSort();
       	$this->iniFilters();
@@ -56,15 +57,16 @@
 			$this->db = new ZoriDatabase("",null,null,0);
 		}
 
-		public function getMenu(){
+		public function getMenu()
+      {
 			$menu = new ZoriMenu();
 			$this->MENU = $menu->BuildMenu();
 
          return $this->MENU;
 		}
 
-		public function  getHeader(){
-
+		public function  getHeader()
+      {
          $db = "";
          if($this->SystemSettings[SERVER_NAME] == "localhost"){
             global $DATABASE_SETTINGS;
@@ -115,7 +117,8 @@
 			return $this->HEADER;
 		}
 
-		public function Content($html){
+		public function Content($html)
+      {
 			$this->CONTENT .= $html;
 			return $this->CONTENT;
 		}
@@ -253,19 +256,18 @@
 	   }
 
       protected function ToolBar()
-      {//print_rr($this->renderToolbarButtons() );
-
+      {
          $strToolBar= "
 	      	<div id='div-toolbar'>
 	         	<div class='pull-left'>
 		            <table style='margin-bottom:0px;'>
 		               <tr> 
-		                  	<td align='left' style='border-right: 3px groove #1ab394;; padding: 40px 150px 19px 15px;'>
-		                  		<span class='text-muted'>".$this->ToolBar->Label."</span>
-		                  	</td>
-		                  	<td style='position: relative; border: 0px dashed orange; padding: 0px;'>
-		                  		". $this->ToolBar->Block . $this->renderFilters() ."
-		                  	</td>
+	                  	<td align='center' style='border-right: 2px groove #1ab394; padding: 35px 100px 19px 15px;'>
+	                  		<span class='text-muted'>".$this->ToolBar->Label."</span>
+	                  	</td>
+	                  	<td style='position: relative; border: 0px dashed orange; padding: 0px;'>
+	                  		". $this->ToolBar->Block . $this->renderFilters() ."
+	                  	</td>
 		               </tr>
 		            </table>
 	         	</div>
@@ -275,9 +277,9 @@
 	         	<div style='clear:both'></div>
 	      	</div>
       	";
-         	$this->ToolBar = $strToolBar;
+         $this->ToolBar = $strToolBar;
 
-            return $this->ToolBar;
+         return $this->ToolBar;
       }
       
 
@@ -342,7 +344,7 @@
       }
 
       protected function iniFilters()
-      {  /*notes: filters have 2 stages. stage 1, iniFilters, executes onConstruct of the Nemo. stage 2, renderFilters(), executes onDisplay() of Nemo
+      {  /*notes: filters have 2 stages. stage 1, iniFilters, executes onConstruct of the Zori. stage 2, renderFilters(), executes onDisplay() of Zori
          *     : $this->Filters referst to the public Filters collection in the Child-Class, eg. Client->Filters
          *
          *
@@ -350,7 +352,7 @@
 
          //save || delete session filters
          if(($_REQUEST[Action] == "Filter" || $_POST[Action] == "Run Report") && count($this->Filters) >0 )
-         {//&& because $this->Filters doesn't have an ini value when $page = new Nemo(), but has in $page = new Client() [extends Nemo]
+         {//&& because $this->Filters doesn't have an ini value when $page = new Zori(), but has in $page = new Client() [extends Zori]
             foreach($this->Filters as $key => &$filter)
             {
                $_SESSION[PAGES]->Entity[$this->SystemSettings[SCRIPT_NAME]]->Filters[$key] = $_REQUEST[$key];
@@ -390,7 +392,7 @@
       }
 
       private function iniPaging()
-      {//new 20111010 - pj
+      {//new 20111010
          if($_REQUEST[Action] == "Filter" || $_GET[exeClearSort] || $_REQUEST[Action] == "Clear" || $_GET[srtNew] != "")
          {//if new sorting, restart paging
             unset($_SESSION[PAGES]->Entity[$this->SystemSettings[SCRIPT_NAME]]->Paging);
@@ -413,7 +415,7 @@
          global $SP, $BR;
          $strFilterControls = ""; 
 
-         	if(count($this->Filters)>0){//
+         	if(count($this->Filters)>0){
             	$i = 0;
             	foreach($this->Filters as $key => &$filter){
                	$filter->ControlHTML = ZoriControl::renderControl($filter->tag, $filter->html);
@@ -501,24 +503,18 @@
 
       protected function renderToolbarButtons()
       {
-   //print_rr($this->ToolBar->Buttons);
-
          $ArrPageToolbar = array();
          foreach($this->ToolBar->Buttons as $id => $control)
          {
 
             if($control->blnShow == 1)
             {
-
                $ArrPageToolbar[$control->intOrder] = $control;
-               
             }
          }
-         //print_rr($ArrPageToolbar);
          ksort($ArrPageToolbar); 
          foreach($ArrPageToolbar AS $intOrder => $ToolbarItem)
          {
-
             $ToolbarItem->Control->class = $ToolbarItem->Control->class . " " . $ToolbarItem->Span->class;
             $button = ZoriControl::renderControlToolbar($ToolbarItem->Control->tag, $ToolbarItem->Control);
             //$span = NemoControl::renderControlToolbar($ToolbarItem->Span->tag, $ToolbarItem->Span);
@@ -537,10 +533,6 @@
             </tr>
          </table>
          ";
-         //print_rr($this->ToolBar->Buttons);
-
       }
-
-
 	}
 ?>
