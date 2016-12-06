@@ -122,7 +122,7 @@ class ZoriList extends ZoriListBasic
          $Pager = $this->renderPager();
       }
       return "
-      <table class='table table-sm table-hover table-responsive' $htmlAttr>
+      <table class='table table-xs table-hover table-responsive' $htmlAttr>
          $strCaption
          $strList
          $Pager

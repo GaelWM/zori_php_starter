@@ -251,7 +251,7 @@ class ZoriListBasic extends Zori
          $strCaption = "<caption>$strCaption</caption>";
 
       return "
-      <table class='table table-sm table-responsive' $htmlAttr>
+      <table class='table table-xs table-responsive' $htmlAttr>
          $strCaption
          $strList
       </table>
