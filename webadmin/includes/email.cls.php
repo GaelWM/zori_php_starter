@@ -160,11 +160,11 @@ class Email extends ZoriList
          <span class='textHeading textColour' style='width: 100%;'>$rowEmail->strSubject</span>
          $BR
          $BR
-         <span class='textGraphite'>From:</span> ". htmlentities($rowEmail->strFrom) ."$BR
-         <span class='textGraphite'>To:</span> ". htmlentities($rowEmail->strTo) ."$BR
+         <span class='textGraphite' style='width: 100%;' >From:</span> ". htmlentities($rowEmail->strFrom) ."$BR
+         <span class='textGraphite' style='width: 100%;' >To:</span> ". htmlentities($rowEmail->strTo) ."$BR
          $strCC
-         <span class='textGraphite'>Date:</span> $rowEmail->dtEmail$BR
-         <span class='textGraphite'>Status:</span> $rowEmail->strStatus$BR
+         <span class='textGraphite' style='width: 100%;' >Date:</span> $rowEmail->dtEmail$BR
+         <span class='textGraphite' style='width: 100%;' >Status:</span> $rowEmail->strStatus$BR
          $BR";
       $strEmailBody = $rowEmail->txtBody;
 

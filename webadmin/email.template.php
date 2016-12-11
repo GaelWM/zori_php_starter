@@ -53,7 +53,7 @@
          $page->Fields["refCourseTypeID"]->ORDINAL_POSITION ++;
 
          $page->Fields["strSubject"]->Control->class .= " controlWideMax";
-         $page->Fields["txtBody"]->Control->style = "height: 350px;";
+         $page->Fields["txtBody"]->Control->style = "height: 350px; width:350px;";
 
          $page->Fields["arrSubstitutions"]->ORDINAL_POSITION -= 1;
          $page->Fields["arrSubstitutions"]->Control->style = "display: none;";

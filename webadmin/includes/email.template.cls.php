@@ -160,7 +160,7 @@ class EmailTemplate extends ZoriList
 
    }
 
-   public function renderAttachments($EmailTemplateID, $strAttachments)
+   public static function renderAttachments($EmailTemplateID, $strAttachments)
    {
       global $xdb, $SystemSettings, $DT, $SP, $TR, $BR, $HR;
 

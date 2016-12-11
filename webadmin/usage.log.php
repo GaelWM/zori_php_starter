@@ -28,7 +28,7 @@
       case "New":
          $page = new ZoriDetails();
          $page->AssimulateTable("sysLogin", $LoginID, "strUsername");
-         print_rr($page->Fields);
+         //print_rr($page->Fields);
          $page->renderControls();
          $page->ContentLeft = $page->renderTable($page->ToolBar->Label) . $page->getJsNemoValidateSave($JS);
       break;

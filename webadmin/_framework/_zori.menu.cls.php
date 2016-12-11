@@ -79,7 +79,7 @@ class ZoriMenu
                {
                   $strMenu .= "
                      <a href='$row1->URL'>
-                     <span class='glyphicon glyphicon-th' aria-hidden='true'></span>
+                     <span class='glyphicon glyphicon-user' aria-hidden='true'></span>
                      <span class='hidden-sm hidden-xs' >$row1->Label</span>
                   </a>
                ";

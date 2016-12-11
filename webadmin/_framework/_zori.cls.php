@@ -101,7 +101,7 @@
 							<span class='label label-message'>3</span>
 						</li>
 						<li>
-							<a href='user.php?Action=Edit&UserID=".$_SESSION[USER]->ID."'>
+							<a href='my.profile.php'>
 								<span class='glyphicon glyphicon-user' aria-hidden='true'></span>
 								<label>".$_SESSION[USER]->USERNAME."</label>
 							</a>

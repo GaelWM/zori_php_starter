@@ -12,21 +12,21 @@
 		private $FOOTER;
 
 		public $controls;
-   	public $db;
+   		public $db;
 		public $SystemSettings = array();
 		public $Message;
 
 		function __construct($id="myChart",$width=100,$height=100,$class="",$custom="")
-      {
-         $JS = "
-         <script>
-            <canvas id='$id' width='$width' height='$height' class='$class' $custom ></canvas>
-         ";
+      	{
+         	$JS = "
+	         	<script>
+	            	<canvas id='$id' width='$width' height='$height' class='$class' $custom ></canvas>
+	        ";
 		}
 
-      function setChartData(){
-         
-      }
+      	function setChartData(){
+	       
+	    }
 
 		
 

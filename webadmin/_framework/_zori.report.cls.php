@@ -104,7 +104,7 @@ class ZoriReport extends Zori
          </tr>
          </table>
       </div>
-      <div class='well' >
+      <div class='well'>
          <table class='tblBlank' style='margin: 0px;'>
          <tr>
             <td>
