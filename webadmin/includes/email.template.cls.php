@@ -17,7 +17,7 @@ class EmailTemplate extends ZoriList
    public function __construct($DataKey)
    {
       //filters //2013-11-20 - added Filters for Search, type, Course type, status -christiaan
-      $this->Filters[frSearch]->tag = "input";
+      $this->Filters["frSearch"]->tag = "input";
       $this->Filters[frSearch]->html->value = "";
       $this->Filters[frSearch]->html->type = "text";
       $this->Filters[frSearch]->html->class = "controlText";
