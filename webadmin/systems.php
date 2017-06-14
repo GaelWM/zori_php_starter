@@ -5,14 +5,14 @@
 //DEV REPO
    $DATABASE_SETTINGS["localhost"]->hostname = "localhost";
    $DATABASE_SETTINGS["localhost"]->username = "root";
-   $DATABASE_SETTINGS["localhost"]->password = "root";
+   $DATABASE_SETTINGS["localhost"]->password = "";
    $DATABASE_SETTINGS["localhost"]->database = "zori_db";
    $DATABASE_SETTINGS["localhost"]->sessionpath = $_SERVER['DOCUMENT_ROOT']."/zori_php_starter/webadmin/SESSION/";
 
 //DEV QA
    $DATABASE_SETTINGS["localhost"]->hostname = "localhost";
    $DATABASE_SETTINGS["localhost"]->username = "root";
-   $DATABASE_SETTINGS["localhost"]->password = "root";
+   $DATABASE_SETTINGS["localhost"]->password = "";
    $DATABASE_SETTINGS["localhost"]->database = "zori_db";
    $DATABASE_SETTINGS["localhost"]->sessionpath = $_SERVER['DOCUMENT_ROOT']."/zori_php_starter/webadmin/SESSION/";
 
