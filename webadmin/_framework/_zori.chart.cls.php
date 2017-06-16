@@ -49,7 +49,8 @@
                 <script>
                     var data = 
                     {
-                        labels : ['January','February','March','April','May','June','July','August','September','October','November','December'],
+                        labels : ['5','10','15','20','30','40','50','August'
+                                    ,'September','October','November','December'],
                         
                         datasets : 
                             [
@@ -131,13 +132,13 @@
                         datasetStroke : true,
                         
                         //Number - Pixel width of dataset stroke
-                        datasetStrokeWidth : 2,
+                        datasetStrokeWidth : 1,
                         
                         //Boolean - Whether to fill the dataset with a colour
                         datasetFill : true,
                         
                         //Boolean - Whether to animate the chart
-                        animation : false,
+                        animation : true,
                 
                         //Number - Number of animation steps
                         animationSteps : 60,
