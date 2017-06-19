@@ -49,13 +49,11 @@
                 <script>
                     var data = 
                     {
-<<<<<<< HEAD
-<<<<<<< HEAD
                         labels : ['5','10','15','20','30','40','50','August'
                                     ,'September','October','November','December'],
-=======
+
                         labels : ['January','February','March','April','May','June','July','August','September','October','November','December'],
->>>>>>> parent of e28ce9d... 20170614: - chart class revamp - Gael
+
                         
                         datasets : 
                             [
@@ -68,8 +66,7 @@
                                             81,95,105,
                                             130,120,105,
                                             90,75,70]
-<<<<<<< HEAD
-=======
+
                         type: '$this->chartType',
                         data: {
                             labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
@@ -103,9 +100,6 @@
                             yAxes: [{
                                 ticks: {
                                     beginAtZero:true
->>>>>>> e28ce9d26c5d8a71211143f4299f08c05e6d406c
-=======
->>>>>>> parent of e28ce9d... 20170614: - chart class revamp - Gael
                                 }
                             ]
                     }
@@ -174,34 +168,27 @@
                         //Boolean - Whether to show a stroke for datasets
                         datasetStroke : true,
                         
-<<<<<<< HEAD
-<<<<<<< HEAD
+
                         //Number - Pixel width of dataset stroke
                         datasetStrokeWidth : 1,
-=======
+
                     //     //Number - Pixel width of dataset stroke
                     //     datasetStrokeWidth : 2,
->>>>>>> e28ce9d26c5d8a71211143f4299f08c05e6d406c
-=======
+
                         //Number - Pixel width of dataset stroke
                         datasetStrokeWidth : 2,
->>>>>>> parent of e28ce9d... 20170614: - chart class revamp - Gael
                         
                         //Boolean - Whether to fill the dataset with a colour
                         datasetFill : true,
                         
-<<<<<<< HEAD
-<<<<<<< HEAD
                         //Boolean - Whether to animate the chart
                         animation : true,
-=======
-                    //     //Boolean - Whether to animate the chart
-                    //     animation : false,
->>>>>>> e28ce9d26c5d8a71211143f4299f08c05e6d406c
-=======
+
+                    //  Boolean - Whether to animate the chart
+                    //  animation : false,
+
                         //Boolean - Whether to animate the chart
                         animation : false,
->>>>>>> parent of e28ce9d... 20170614: - chart class revamp - Gael
                 
                         //Number - Number of animation steps
                         animationSteps : 60,

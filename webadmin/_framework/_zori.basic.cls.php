@@ -69,15 +69,48 @@
 			$this->CONTENT .= $html;
 			return $this->CONTENT;
 		}
-		protected function ContentBox()
-	   	{
-	      return "
-	      	<div class='panel panel-default'>
-				<div class='panel-body zoriTableDiv'>
-					$this->Content
-				</div>
-			</div>";
-	   	}
+		
+      protected function ContentBox()
+      {
+
+         if($this->Filters != "")
+         {
+            if(isset($this->ContentBootstrap_Filters)){//20170411 - override filter columns - g
+               if($this->ContentBootstrap_Filters != "col-md-2"){
+                  $cbColumns = $this->ContentBootstrap_Filters;
+               }
+            }else{
+               $cbColumns = "col-md-2";
+            }
+               
+            $this->ContentBootstrap[-1][$cbColumns] = "  
+               <div class='x_title' id='pageFilters'>
+                  <h2>Filters</h2>
+                  <div class='clearfix'></div>
+               </div>
+               <div class='x_content'>
+                  <p class='text-muted font-13 m-b-30'> <!-- ABILITY TO ADD EXPLANATION BELOW --></p>
+
+                  <div id='datatable-buttons' class=' '> </div>
+                  <div class='table-responsive'> ". $this->renderFilters() ." </div>
+               </div>
+            ";
+         }
+
+         ksort($this->ContentBootstrap);
+         foreach($this->ContentBootstrap AS $Order => $arrVal){
+            foreach($arrVal AS $ColSize => $strContent){
+               ## LOGIN PAGE HAS DIFFERENT STYLING THAN REST OF SITE(BASIC AND NORMAL IS DIFFERENT)
+               if($this->SystemSettings[SCRIPT_NAME] == "login.php"){
+                  $content = $strContent;
+               }
+               else{
+                  $content .= "<div class='$ColSize'><div class='x_panel'>$strContent</div></div>";
+               }
+            }
+         }
+         return $content;
+      }
 
 		public function getFooter()
 		{
@@ -86,7 +119,7 @@
 
 			$this->FOOTER =
 			"
-				<footer id='admin-footer' class='clearfix'>
+				<footer class='clearfix footer_fixed' style='position:absolute; bottom:0px; left:0px; width:100%; margin-left:0px;'> 
 					<div class='pull-left'><b>".$SystemSettings[MadeBy]."</b></div>
 					<div class='pull-right'><b>".$SystemSettings[Copyright]."</b>
                ".$SystemSettings[CopyrightSymbolYear]."</div>
@@ -103,6 +136,39 @@
          }
 		}
 
+      public function Message($text=null)
+      {
+         if($text)
+            $this->Message->Text = $text;
+
+         switch($this->Message->class)
+         {
+            case "warning":
+            case "restricted":
+               $this->Message->class = "alert alert-warning alert-dismissible fade in";
+               break;
+            case "error":
+               $this->Message->class = "alert alert-danger alert-dismissible fade in";
+               break;
+            case "success":
+            case "good":
+               $this->Message->class = "alert alert-success alert-dismissible fade in";
+               break;
+            case "":
+               $this->Message->class = "alert alert-info alert-dismissible fade in";
+               break;
+         }
+
+         if($this->Message->Text != "")
+         return "
+            <div class='".$this->Message->class."' role='alert'>
+                <button type='button' class='close' data-dismiss='alert' aria-label='Close' style='position:relative; float:right; width: 40px;'><span aria-hidden='true'>×</span>
+                </button>
+                <strong >". $this->Message->Text ."</strong>
+            </div>
+         ";
+      }
+
    	protected function getMessage()// Types => (success,warning,info,error) GAEL
    	{
    		$JS ="
@@ -110,7 +176,7 @@
             var interval;
             var codetmpl = '<code>%codeobj%</code><br><code>%codestr%</code>';
             var message = '".$this->Message->Text."';
-            var priority = '".$this->Message->Class."';
+            var priority = '".$this->Message->class."';
             var title = '".$this->Message->Title."';
 
             $(document).ready(function ()

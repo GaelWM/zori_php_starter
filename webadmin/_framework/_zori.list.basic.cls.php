@@ -1,9 +1,7 @@
 <?php
 //include_once("_nemo.basic.cls.php");
 /*
- * 20110621 - refined anchor tag click - pj
- * 20110621 - added field-type data-transforms - pj
- * 20140205 - add ->Data[$i][html] in order to render attributes in the data TR on renderList() - pj
+ * 20170618: Menu class revamp -- Gael
  */
 include_once("systems.php");
 include_once("_framework/_zori.cls.php");

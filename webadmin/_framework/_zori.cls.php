@@ -3,7 +3,7 @@
 	* By Gael Musikingala 20160919 //20161115 -- GAEL [Code Reviewed]
 	*/
 	include_once ("systems.php");
-    include_once("_framework/_zori.basic.cls.php");
+   include_once("_framework/_zori.basic.cls.php");
 	include_once("_framework/_zori.menu.cls.php");
 
 	class Zori extends ZoriBasic
@@ -59,35 +59,68 @@
 
 		public function getMenu()
       {
-			$menu = new ZoriMenu();
-			$this->MENU = $menu->BuildMenu();
+			$this->MENU = new ZoriMenu();
+			$this->MENU->BuildMenu();
 
-         return $this->MENU;
+         return $this->MENU->getControl();
 		}
 
 		public function  getHeader()
       {
+         global $_LANGUAGE, $_TRANSLATION, $BR, $xdb;
+
          $db = "";
          if($this->SystemSettings[SERVER_NAME] == "localhost"){
             global $DATABASE_SETTINGS;
             $db = ": ". $DATABASE_SETTINGS["localhost"]->database;
          }
+
+         if(is_array($_LANGUAGE) && $_TRANSLATION[$_SESSION[USER]->LANGUAGE]["lblLogout"] != ""){
+            $lblLogout = $_TRANSLATION[$_SESSION[USER]->LANGUAGE]["lblLogout"];
+         }else{
+            $lblLogout = "Log out";
+         }
+
+         if(is_array($_LANGUAGE))
+         {
+            $header .= "<div style='position:relative; float:right; padding-left:20px; margin-top:8px;' align='right'>";
+            foreach ($_LANGUAGE as $Lang => $obj) {
+               if($obj->IconHTML)
+               {
+                  $lang = "<img ". ZoriControl::renderAttributes($obj->IconHTML) ." />";
+               }else{
+                  $lang = $obj->strLanguage;
+               }
+               $header .= "<a href='#' onclick=\"setLanguage('". $this->SystemSettings[FULL_URL] ."','$obj->strLanguage')\">
+                              <div class='langBtn'>  $lang $BR $obj->strLanguage</div>
+                           </a>";
+            }
+            $header .= " <div style='clear:both;'></div></div>";
+
+         }
+
+         if(isset($_SESSION[USER]->ID))
+         {
+            $row = $xdb->getRowSQL("SELECT `Profile:PicturePath` AS ProfilePicture, strUser FROM sysUser WHERE UserID = " . $_SESSION[USER]->ID, 0);
+            $profilePicture = ($row->ProfilePicture == "" ? "blank.jpg" : $row->ProfilePicture);
+            $userName = $row->strUser;
+         }
+         else
+         {
+           $profilePicture = "blank.jpg";
+           $userName = "Guest";
+         }
          
-			$this->HEADER =
+			$header .=
 			"	
 				<nav class='navbar-default pull-left'>
-					<button type='button' class='navbar-toggle collapsed' data-toggle='offcanvas' data-target='#sidenav' aria-expanded='false'>
-			        <span class='sr-only'>Toggle navigation</span>
-			        <span class='icon-bar'></span>
-			        <span class='icon-bar'></span>
-			        <span class='icon-bar'></span>
-				   </button>
+					<div style='position:relative; float:left; width:40px !important; padding-top:10px;' class='nav toggle'> <a id='menu_toggle' onClick='jsHideMenu();'><i class='fa fa-bars'></i></a>  </div>
+               <div style='position:relative; float:left; width:100px !important; padding-top:10px;' class='nav toggle'> <a id='menu_toggle' onClick='jsHideFilters();'><i style='font-size:20px; padding:2px;' class='fa fa-filter'></i>Filters</a> </div>
 				</nav>
-				<div class='col-md-5'>
-					<input type='text' class='hidden-sm hidden-xs' id='header-search-field' name='search' 
-					placeholder='Search for something ...'/>
-				</div>
-				<div class='col-md-7'>
+				
+				<div class='col-md-10'>
+               <input type='text' class='hidden-sm hidden-xs' id='header-search-field' name='search' 
+               placeholder='Search for something ...'/>
 					<ul class='pull-right'>
 						<li id='welcome' class='hidden-xs' >Welcome to your administration area</li>
 						<li class='fixed-width'>
@@ -100,22 +133,95 @@
 							<span class='glyphicon glyphicon-envelope' aria-hidden='true'></span></a>
 							<span class='label label-message'>3</span>
 						</li>
-						<li>
-							<a href='my.profile.php'>
-								<span class='glyphicon glyphicon-user' aria-hidden='true'></span>
-								<label>".$_SESSION[USER]->USERNAME."</label>
-							</a>
-						</li>
-						<li>
-							<a href='login.php?Action=Redirect' class='logout'>
-							<span class='glyphicon glyphicon-log-out' aria-hidden='true'></span> Log out</a>
-						</li>
-						
+                  <li style='height:20px;' class='dropdown'>
+                     <a href='#' class='user-profile dropdown-toggle' data-toggle='dropdown' aria-expanded='false'>
+                       <img src='profilepictures/" . $profilePicture . "' alt=''>" . $userName . "
+                       <span class=' fa fa-angle-down'></span>
+                     </a>
+                     <ul class='dropdown-menu dropdown-usermenu pull-right'>
+                       <li><a href='my.profile.php'> Profile</a></li>
+                       <li><a href='faq.console.php'>Help</a></li>
+                       <li><a href='login.php'><i class='fa fa-sign-out pull-right'></i> Log Out</a></li>
+                     </ul>
+                  </li>
 					</ul>
+               <script>
+                  $(document).ready(function() {
+                     FilterStatus = localStorage.getItem('filter');
+                     MenuStatus = localStorage.getItem('menu');
+
+                     if(FilterStatus == '') { localStorage.setItem('filter', 'show'); }
+                     if(MenuStatus == '') { localStorage.setItem('menu', 'show'); }
+
+                     $('.side-menu').find('active').find('.child_menu').css( 'background-color', 'red' );
+
+                     if(FilterStatus == 'show'){
+                        $('#pageFilters').parent().parent().show(1);
+                        $('.col-md-12').addClass('col-md-10');
+                        $('.col-md-12').removeClass('col-md-12');
+                     }
+                     else if(FilterStatus == 'hidden'){
+                        $('#pageFilters').parent().parent().hide(1);
+                        $('.col-md-10').addClass('col-md-12');
+                        $('.col-md-10').removeClass('col-md-10');
+                     }
+                  });
+
+                  function jsHideMenu()
+                  {
+                     bodyClass = $('body').attr('class');
+                     if(bodyClass == 'nav-md')
+                     {
+                        localStorage.setItem('menu', 'hidden');
+                     }
+                     else if(bodyClass == 'nav-sm')
+                     {
+                        localStorage.setItem('menu', 'show');
+                     }
+                  }
+
+                  function jsHideFilters()
+                  {
+                     if($('#pageFilters').is(':visible') ){
+                        $('#pageFilters').parent().parent().hide(1);
+                        $('.col-md-10').addClass('col-md-12');
+                        $('.col-md-10').removeClass('col-md-10');
+                        localStorage.setItem('filter', 'hidden');
+                     }
+                     else{
+                        $('#pageFilters').parent().parent().show(1);
+                        $('.col-md-12').addClass('col-md-10');
+                        $('.col-md-12').removeClass('col-md-12');
+                        localStorage.setItem('filter', 'show');
+                     }
+                  }
+                </script>
+
 				</div>
 			";
+         $this->HEADER = $header;
 			return $this->HEADER;
 		}
+
+      protected function MenuProfileInfo()
+      {
+         global $xdb;
+
+         if(isset($_SESSION[USER]->ID))
+         {
+           $row = $xdb->getRowSQL("SELECT `Profile:PicturePath` AS ProfilePicture, strUser FROM sysUser WHERE UserID = " . $_SESSION[USER]->ID, 0);
+           $profilePicture = ($row->ProfilePicture == "" ? "blank.jpg" : $row->ProfilePicture);
+           $userName = $row->strUser;
+         }
+         else
+         {
+           $profilePicture = "blank.jpg";
+           $userName = "Guest";
+         }
+
+         return "<div class='profile_pic'> <img src='profilepictures/" . $profilePicture . "' alt='...' class='img-circle profile_img'> </div>
+               <div class='profile_info'> <span>Welcome,</span> <h2>" . $userName . "</h2></div>";
+      }
 
 		public function Content($html)
       {
@@ -130,7 +236,7 @@
 
 			$this->FOOTER =
 			"
-				<footer id='admin-footer' class='clearfix'>
+				<footer class='clearfix footer_fixed' style='position:absolute; bottom:0px; left:0px; width:100%; margin-left:0px;'>
 					<div class='pull-left'><b>".$SystemSettings[MadeBy]."</b></div>
 					<div class='pull-right'><b>".$SystemSettings[Copyright]."</b>
                ".$SystemSettings[CopyrightSymbolYear]."</div>
@@ -255,31 +361,52 @@
 		      	</div class=Logout>";
 	   }
 
+      // protected function ToolBar()
+      // {
+      //    $strToolBar= "
+	     //  	<div id='div-toolbar'>
+	     //     	<div class='pull-left'>
+		    //         <table style='margin-bottom:0px;'>
+		    //            <tr> 
+	     //              	<td align='center' style='border-right: 2px groove #1ab394; padding: 35px 100px 19px 15px;'>
+	     //              		<span class='text-muted'>".$this->ToolBar->Label."</span>
+	     //              	</td>
+	     //              	<td style='position: relative; border: 0px dashed orange; padding: 0px;'>
+	     //              		". $this->ToolBar->Block . $this->renderFilters() ."
+	     //              	</td>
+		    //            </tr>
+		    //         </table>
+	     //     	</div>
+	     //     	<div class='pull-right'>
+	     //        	". $this->renderToolbarButtons() ."
+	     //     	</div>
+	     //     	<div style='clear:both'></div>
+	     //  	</div>
+      // 	";
+      //    $this->ToolBar = $strToolBar;
+
+      //    return $this->ToolBar;
+      // }
+
       protected function ToolBar()
       {
-         $strToolBar= "
-	      	<div id='div-toolbar'>
-	         	<div class='pull-left'>
-		            <table style='margin-bottom:0px;'>
-		               <tr> 
-	                  	<td align='center' style='border-right: 2px groove #1ab394; padding: 35px 100px 19px 15px;'>
-	                  		<span class='text-muted'>".$this->ToolBar->Label."</span>
-	                  	</td>
-	                  	<td style='position: relative; border: 0px dashed orange; padding: 0px;'>
-	                  		". $this->ToolBar->Block . $this->renderFilters() ."
-	                  	</td>
-		               </tr>
-		            </table>
-	         	</div>
-	         	<div class='pull-right'>
-	            	". $this->renderToolbarButtons() ."
-	         	</div>
-	         	<div style='clear:both'></div>
-	      	</div>
-      	";
-         $this->ToolBar = $strToolBar;
+         //20170130 - removed ID and name from Tool bar heading label.
+         $strToolBarHeading = strtok($this->ToolBar->Label, ":");
 
-         return $this->ToolBar;
+         return " <div class='page-title'>
+                     <div class='title_left'>
+                        <h3 style='margin:10px 0px 0px 0px;'>".  $strToolBarHeading ."<small> </small></h3><br>
+                     </div>
+                     <div class='title_right'>
+                        <div class='col-md-5 col-sm-5 col-xs-12' style='float:right;'>
+                           <div class='input-group' style='float:right;'>
+                               ". $this->renderToolbarButtons() ."
+                           </div>
+                           <div style='clear:both;'></div>
+                        </div>
+                        <div style='clear:both;'></div>
+                     </div>
+                  </div>";
       }
       
 
@@ -409,46 +536,89 @@
          $this->Pages[$this->SystemSettings[SCRIPT_NAME]]->PageNumber = $_SESSION[PAGES]->Entity[$this->SystemSettings[SCRIPT_NAME]]->Paging[PageNumber];
       }
 
+      // protected function renderFilters()
+      // {//note $this->Filters referst to the public Filters collection in the Child-Class, eg. Client->Filters
+      //    //print_rr($this->Pages[$this->SystemSettings[SCRIPT_NAME]]->Filters);
+      //    global $SP, $BR;
+      //    $strFilterControls = ""; 
+
+      //    	if(count($this->Filters)>0){
+      //       	$i = 0;
+      //       	foreach($this->Filters as $key => &$filter){
+      //          	$filter->ControlHTML = ZoriControl::renderControl($filter->tag, $filter->html);
+
+   	  //           if($filter->tag == "hidden")
+   	  //           {//20121204 - hiding hidden filter vars - pj
+   	  //              $strFilterControls .= $filter->ControlHTML;
+   	  //           }else{
+   	  //              if($i % 3 == 0 && $i != 0)
+   	  //              {
+   	  //                 $strFilterControls .= "</tr><tr>";
+   	  //              }
+   	  //              $strFilterControls .= "
+      //                   <td align=''>
+      //                      <label style='color:#000;' for=\"$key\" class='label'>$SP$SP". ZoriDetails::cleanColumnName($key) .":</label>
+      //                   </td>
+      //                   <td align=''>". $filter->ControlHTML ."</td>
+      //                ";
+   	  //              $i++;
+   	  //           }
+      //       	}
+
+      //       	$strFilterControls .= "
+      //          	<td rowspan=2 valign=middle align=center ></td>";
+
+   	  //        return "
+   	  //        	<table class='tblBlank' style='margin-bottom: 0px; padding-top:0px;'>
+   	  //        		<tr>$strFilterControls</tr>
+   	  //        	</table>
+      //         		</td>
+      //          	<td nowrap>$SP$SP<input style='background:#fff;' type=submit name='Action' id='btnFilter' class='btn btn-default' value='Filter'>
+      //           	$SP<input style='background:#fff;' type=submit name='Action' id='btnClear' class='btn btn-default' value='Clear'>"; //</td> ends outside in the calling function
+      //    	}
+      // }
+
       protected function renderFilters()
       {//note $this->Filters referst to the public Filters collection in the Child-Class, eg. Client->Filters
          //print_rr($this->Pages[$this->SystemSettings[SCRIPT_NAME]]->Filters);
-         global $SP, $BR;
-         $strFilterControls = ""; 
+         include_once("_zori.details.cls.php");
+         include_once("_framework/_zori.control2.cls.php");
 
-         	if(count($this->Filters)>0){
-            	$i = 0;
-            	foreach($this->Filters as $key => &$filter){
-               	$filter->ControlHTML = ZoriControl::renderControl($filter->tag, $filter->html);
+         global $SP, $BR, $_LANGUAGE, $_TRANSLATION;
+   //INI
+         $strFilterControls = "";
+   //go:
+         if(count($this->Filters)>0){//
+            $i = 0;
+            foreach($this->Filters as $key => &$filter)
+            {
 
-   	            if($filter->tag == "hidden")
-   	            {//20121204 - hiding hidden filter vars - pj
-   	               $strFilterControls .= $filter->ControlHTML;
-   	            }else{
-   	               if($i % 3 == 0 && $i != 0)
-   	               {
-   	                  $strFilterControls .= "</tr><tr>";
-   	               }
-   	               $strFilterControls .= "
-                        <td align=''>
-                           <label style='color:#000;' for=\"$key\" class='label'>$SP$SP". ZoriDetails::cleanColumnName($key) .":</label>
-                        </td>
-                        <td align=''>". $filter->ControlHTML ."</td>
-                     ";
-   	               $i++;
-   	            }
-            	}
+               $zc = ZoriProtoControl::__new($filter->Type, $key, $filter->VALUE, $filter->html, $blnRequired=0, $isSelected=$filter->VALUE, $arrOptions=null, $filter->sql, $filter->sqlGrouping);
 
-            	$strFilterControls .= "
-               	<td rowspan=2 valign=middle align=center ></td>";
+               if($zc->Type == "hidden")
+               {//20121204 - hiding hidden filter vars - pj
+                  $strFilterControls .= $zc->HTML;
+               }else{
 
-   	         return "
-   	         	<table class='tblBlank' style='margin-bottom: 0px; padding-top:0px;'>
-   	         		<tr>$strFilterControls</tr>
-   	         	</table>
-              		</td>
-               	<td nowrap>$SP$SP<input style='background:#fff;' type=submit name='Action' id='btnFilter' class='btn btn-default' value='Filter'>
-                	$SP<input style='background:#fff;' type=submit name='Action' id='btnClear' class='btn btn-default' value='Clear'>"; //</td> ends outside in the calling function
-         	}
+                  if($filter->label != "" && $_TRANSLATION[$_SESSION[USER]->LANGUAGE][$key] != "")
+                     $filter->label = $_TRANSLATION[$_SESSION[USER]->LANGUAGE][$key];
+
+                  if($filter->label != "" && $_TRANSLATION[$_SESSION[USER]->LANGUAGE][$filter->label] != "")
+                     $filter->label = $_TRANSLATION[$_SESSION[USER]->LANGUAGE][$filter->label];
+
+                  if($filter->label == "")
+                     $filter->label = $key;
+
+            include_once("_framework/_zori.details2.cls.php");
+                  $strFilterControls .= "
+                     <div class='form-group'>
+                        <label for=\"$key\" class='control-label col-xs-12'>". ZoriDetails::cleanColumnName($filter->label) .":<b class='textColour' style='font-size: 20px;'></b></label>
+                        <div class='col-xs-12'>". $zc->HTML ."</div>
+                     </div> ";
+                  $i++;
+               }
+            }
+         }
       }
 
       private function iniLastVisited()
@@ -534,5 +704,25 @@
          </table>
          ";
       }
+
+      public function getBrand()
+      {
+         global $_LANGUAGE, $_TRANSLATION;
+         if(is_array($_LANGUAGE) && $_TRANSLATION[$_SESSION[USER]->LANGUAGE]["Brand"] != "")
+            return $this->SystemSettings["Brand"] = $_TRANSLATION[$_SESSION[USER]->LANGUAGE]["Brand"];
+         else
+            return $this->SystemSettings["Brand"];
+      }
+
+      public function getTitle()
+      {
+         global $_LANGUAGE, $_TRANSLATION;
+      
+         if(is_array($_LANGUAGE) && $_TRANSLATION[$_SESSION[USER]->LANGUAGE]["Brand"] != "")
+            return $this->SystemSettings["Brand"] = $_TRANSLATION[$_SESSION[USER]->LANGUAGE]["Brand"];
+         else
+            return $this->SystemSettings["Brand"]; 
+      }
+
 	}
 ?>
