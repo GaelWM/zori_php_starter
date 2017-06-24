@@ -7,14 +7,14 @@
    $DATABASE_SETTINGS["localhost"]->port = "5432";
    $DATABASE_SETTINGS["localhost"]->username = "root";
    $DATABASE_SETTINGS["localhost"]->password = "";
-   $DATABASE_SETTINGS["localhost"]->database = "zori_db";
+   $DATABASE_SETTINGS["localhost"]->database = "zori_db.sql";
    $DATABASE_SETTINGS["localhost"]->sessionpath = $_SERVER['DOCUMENT_ROOT']."/zori_php_starter/webadmin/SESSION/";
 
 //DEV QA
    $DATABASE_SETTINGS["localhost"]->hostname = "localhost";
    $DATABASE_SETTINGS["localhost"]->username = "root";
    $DATABASE_SETTINGS["localhost"]->password = "";
-   $DATABASE_SETTINGS["localhost"]->database = "zori_db";
+   $DATABASE_SETTINGS["localhost"]->database = "zori_db.sql";
    $DATABASE_SETTINGS["localhost"]->sessionpath = $_SERVER['DOCUMENT_ROOT']."/zori_php_starter/webadmin/SESSION/";
 
 
