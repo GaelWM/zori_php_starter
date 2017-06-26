@@ -8,16 +8,13 @@ include_once("_framework/_zori.control2.cls.php");
    ADD CONSTRAINT `tblBooking.strDriver` FOREIGN KEY (`refDriverID`) REFERENCES `tblDriver` (`DriverID`) ON DELETE CASCADE ON UPDATE CASCADE,
    ADD CONSTRAINT `tblBooking.strClient` FOREIGN KEY (`refClientID`) REFERENCES `tblClient` (`ClientID`) ON DELETE CASCADE ON UPDATE CASCADE;
 
-* 20150112 - v2 added tab controller - jj
-//20150317 - added datalist control type- pj/jj
-//20140717 - added RETURN_URL - maanie
-//20170116 - built-in tab controller - pj/jac
-//20170118 - removed fields from js + new modal popup - maanie
-//20170118 - added required attribute non-nullable fields - maanie
-//20170125 - added sqlGrouping @ render() + select controls - pj
-//20170130 - changed format of caption - maanie
-//20170202 - added encrypted field - pj
-//20170227 - added tab heading variable which includes spaces - maanie
+* 20150112 - v2 added tab controller - 
+//20170118 - removed fields from js + new modal popup
+//20170118 - added required attribute non-nullable fields
+//20170125 - added sqlGrouping @ render() + select controls
+//20170130 - changed format of caption
+//20170202 - added encrypted field
+//20170227 - added tab heading variable which includes spaces
 
 */
 class ZoriDetails extends Zori
@@ -34,8 +31,8 @@ class ZoriDetails extends Zori
    private $jsValidate = "";
    private $jsComponent = ""; // holds custom javascript functions of the styled html components -- Gael 20170112
 
-   public $Tabs = array(); //20170116 - built-in tab controller - pj/jac
-   public $arrTabs = array(); //20170116 - built-in tab controller - pj/jac
+   public $Tabs = array(); //20170116 - built-in tab controller
+   public $arrTabs = array(); //20170116 - built-in tab controller
 
    public function __construct($arrTabs = null)
    {
@@ -1118,7 +1115,7 @@ if($column->DB->COLUMN_NAME == $idxTest){print_rr($this->Fields[$idxCol]); }//di
          </script>";
    }
 
-   protected function Sandbox()
+   protected function ContentBox()
    {
 
       foreach($this->ContentBootstrap AS $Order => $arrVal)

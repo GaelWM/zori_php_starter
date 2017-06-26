@@ -3,12 +3,12 @@
 	* By Gael Musikingala 20160919 //20161115 -- GAEL [Code Reviewed]
 	*/
 	include_once ("systems.php");
-    include_once("_framework/_zori.basic.cls.php");
+   include_once("_framework/_zori.basic.cls.php");
 	include_once("_framework/_zori.menu.cls.php");
 
 	class Zori extends ZoriBasic
 	{
-      public $SystemSettings = array();
+    public $SystemSettings = array();
 		private $MENU;
 		private $HEADER;
 		private $FOOTER;
@@ -73,108 +73,28 @@
          return $this->MENU->getControl();
 		}
 
-		// public function  getHeader()
-  //     {
-  //        $db = "";
-  //        if($this->SystemSettings[SERVER_NAME] == "localhost"){
-  //           global $DATABASE_SETTINGS;
-  //           $db = ": ". $DATABASE_SETTINGS["localhost"]->database;
-  //        }
-         
-		// 	$this->HEADER =
-		// 	"	
-		// 		<nav class='navbar-default pull-left'>
-		// 			<button type='button' class='navbar-toggle collapsed' data-toggle='offcanvas' data-target='#sidenav' aria-expanded='false'>
-		// 	        <span class='sr-only'>Toggle navigation</span>
-		// 	        <span class='icon-bar'></span>
-		// 	        <span class='icon-bar'></span>
-		// 	        <span class='icon-bar'></span>
-		// 		   </button>
-		// 		</nav>
-		// 		<div class='col-md-5'>
-		// 			<input type='text' class='hidden-sm hidden-xs' id='header-search-field' name='search' 
-		// 			placeholder='Search for something ...'/>
-		// 		</div>
-		// 		<div class='col-md-7'>
-		// 			<ul class='pull-right'>
-		// 				<li id='welcome' class='hidden-xs' >Welcome to your administration area</li>
-		// 				<li class='fixed-width'>
-		// 					<a href='#'>
-		// 					<span class='glyphicon glyphicon-bell' aria-hidden='true'></span></a>
-		// 					<span class='label label-warning' >3</span>
-		// 				</li>
-		// 				<li class='fixed-width'> 
-		// 					<a href='#'>
-		// 					<span class='glyphicon glyphicon-envelope' aria-hidden='true'></span></a>
-		// 					<span class='label label-message'>3</span>
-		// 				</li>
-		// 				<li>
-		// 					<a href='my.profile.php'>
-		// 						<span class='glyphicon glyphicon-user' aria-hidden='true'></span>
-		// 						<label>".$_SESSION[USER]->USERNAME."</label>
-		// 					</a>
-		// 				</li>
-		// 				<li>
-		// 					<a href='login.php?Action=Redirect' class='logout'>
-		// 					<span class='glyphicon glyphicon-log-out' aria-hidden='true'></span> Log out</a>
-		// 				</li>
-						
-		// 			</ul>
-		// 		</div>
-		// 	";
-		// 	return $this->HEADER;
-		// }
 
-      protected function Header()
-      {//override basic.header()
+      public function getHeader()
+      {
          global $_LANGUAGE, $_TRANSLATION, $BR, $xdb;
 
          $db = "";
-         if($this->SystemSettings[SERVER_NAME] == "lamp"){
+         if($this->SystemSettings[SERVER_NAME] == "localhost"){
             global $DATABASE_SETTINGS;
-            $db = ": ". $DATABASE_SETTINGS[lamp]->database;
+            $db = ": ". $DATABASE_SETTINGS[localhost]->database;
          }
 
          if(is_array($_LANGUAGE) && $_TRANSLATION[$_SESSION[USER]->LANGUAGE]["lblLogout"] != "")
          {
             $lblLogout = $_TRANSLATION[$_SESSION[USER]->LANGUAGE]["lblLogout"];
+            $lblHelp = $_TRANSLATION[$_SESSION[USER]->LANGUAGE]["lblHelp"];
+            $lblProfile = $_TRANSLATION[$_SESSION[USER]->LANGUAGE]["lblProfile"];
          }else{
-            $lblLogout = "Log out";
+            $lblLogout = " Log out";
+            $lblHelp = " Help";
+            $lblProfile = " Profile";
          }
 
-         $header .= " <div class='dora-HeaderBar2'>
-                     <div class='dora-HeaderLogo'><img width='130px' src='images/logoSmall.png' /></div>
-                     <div class='dora-HeaderName'>
-                        <h1>". $this->getBrand() ."$db</h1>
-                     </div>
-                     <div class='dora-HeaderUser'>
-                        <div style='position:relative; float:left; padding-right:20px; border-right:groove 1px #333; margin-top:8px;'>
-                           <a href='". $this->SystemSettings[LogoutRedirect] ."'>
-                              <b class='logoutWord'>$lblLogout: ". $this->SystemSettings[USER]->USERNAME ."</b>
-                              <img width='31px' height='31px' src='images/icon-logout.png' />
-                           </a>
-                        </div>";
-         if(is_array($_LANGUAGE))
-         {
-            $header .= "<div style='position:relative; float:left; padding-left:20px; margin-top:8px;' align='right'>";
-            foreach ($_LANGUAGE as $Lang => $obj) {
-               if($obj->IconHTML)
-               {
-                  $lang = "<img ". NemoControl::renderAttributes($obj->IconHTML) ." />";
-               }else{
-                  $lang = $obj->strLanguage;
-               }
-               $header .= "<a href='#' onclick=\"setLanguage('". $this->SystemSettings[FULL_URL] ."','$obj->strLanguage')\">
-                              <div class='langBtn'>  $lang $BR $obj->strLanguage</div>
-                           </a>";
-            }
-
-              $header .= "<div style='clear:both;'></div></div>";
-
-         }
-
-         $header .= " </div>
-                  </div>";
 
          if(isset($_SESSION[USER]->ID))
          {
@@ -200,9 +120,9 @@
                        <span class=' fa fa-angle-down'></span>
                      </a>
                      <ul class='dropdown-menu dropdown-usermenu pull-right'>
-                       <li><a href='my.profile.php'> Profile</a></li>
-                       <li><a href='faq.console.php'>Help</a></li>
-                       <li><a href='login.php'><i class='fa fa-sign-out pull-right'></i> Log Out</a></li>
+                       <li><a href='my.profile.php'>$lblProfile</a></li>
+                       <li><a href='faq.console.php'>$lblHelp</a></li>
+                       <li><a href='login.php'><i class='fa fa-sign-out pull-right'></i>$lblLogout</a></li>
                      </ul>
                    </li>
                  </ul>
@@ -310,93 +230,6 @@
 
 		protected function iniToolbar()
    	{
-      	// $this->Buttons[btnPreview]->Control->class = "btn btn-default";
-      	// $this->Buttons[btnPreview]->Control->value = "Preview";
-      	// $this->Buttons[btnPreview]->Icon->class= ""; 
-
-     	
-	      // $this->Buttons[btnReload]->Control->class = "btn btn-default";
-	      // $this->Buttons[btnReload]->Control->value = "Reload";
-	      // $this->Buttons[btnReload]->Icon->class= "glyphicon glyphicon-refresh"; 
-
-      	// $this->Buttons[btnNew2]->Control->class = "btn btn-success";
-      	// $this->Buttons[btnNew2]->Control->value = "New";
-      	// $this->Buttons[btnNew2]->Icon->class= "glyphicon glyphicon-plus"; 
-
-      	// $this->Buttons[btnNew]->Control->class = "btn btn-primary";
-      	// $this->Buttons[btnNew]->Control->value = "New";
-      	// $this->Buttons[btnNew]->Icon->class= "glyphicon glyphicon-plus"; 
-
-      	// $this->Buttons[btnDelete]->Control->class = "btn btn-danger";
-	      // $this->Buttons[btnDelete]->Control->value = "Delete";
-	      // $this->Buttons[btnDelete]->Control->onclick = "return confirm(\"Are you sure you want to delete ". $this->Entity->Name ."(s) and related entities?\");";
-	      // $this->Buttons[btnDelete]->Icon->class = "glyphicon glyphicon-trash"; 
-
-	      // $this->Buttons[btnRevert]->Control->class = "btn btn-default";
-	      // $this->Buttons[btnRevert]->Control->value = "Revert";
-	      // $this->Buttons[btnRevert]->Control->onclick = "";
-	      // $this->Buttons[btnRevert]->Icon->class = "glyphicon glyphicon-arrow-left"; 
-
-	      // $this->Buttons[btnRevert2]->Control->class = "btn btn-default";
-	      // $this->Buttons[btnRevert2]->Control->value = "Revert2";
-	      // $this->Buttons[btnRevert2]->Control->onclick = "";
-	      // $this->Buttons[btnRevert2]->Icon->class = "glyphicon glyphicon-arrow-left"; 
-
-	      // $this->Buttons[btnSend]->Control->class = "btn btn-default";
-	      // $this->Buttons[btnSend]->Control->value = "Send";
-	      // $this->Buttons[btnSend]->Icon->class = "glyphicon glyphicon-send"; 
-
-       // 	$this->Buttons[btnSave]->Control->class = "btn btn-default";
-      	// $this->Buttons[btnSave]->Control->value = "Save";
-      	// $this->Buttons[btnSave]->Control->onclick = "return jsNemoValidateSave();";
-      	// $this->Buttons[btnSave]->Icon->class = "glyphicon glyphicon-floppy-save"; 
-
-
-      	// $this->Buttons[btnClose]->Control->class = "btn btn-default";
-      	// $this->Buttons[btnClose]->Control->value = "Close";
-      	// $this->Buttons[btnClose]->Icon->class = "glyphicon glyphicon-remove";    
-
-      	// $this->Buttons[btnExport]->Control->class = "btn btn-default";
-      	// $this->Buttons[btnExport]->Control->value = "Export";
-      	// $this->Buttons[btnExport]->Icon->class = "glyphicon glyphicon-circle-arrow-up"; 
-
-      	// //extra
-      	// $this->Buttons[btnNext]->Control->class = "btn btn-default";
-      	// $this->Buttons[btnNext]->Control->value = "Next";
-      	// $this->Buttons[btnNext]->Icon->class = "glyphicon glyphicon-forward"; 
-
-      	// $this->Buttons[btnBack]->Control->class = "btn btn-default";
-      	// $this->Buttons[btnBack]->Control->value = "Back";
-      	// $this->Buttons[btnBack]->Icon->class = "glyphicon glyphicon-backward"; 
-
-      	// $this->Buttons[btnHelp]->Control->class = "btn btn-default";
-      	// $this->Buttons[btnHelp]->Control->value = "Help";
-      	// $this->Buttons[btnHelp]->Icon->class = "glyphicon glyphicon-question-sign"; 
-
-      	// $this->Buttons[btnFinalize]->Control->class = "btn btn-default";
-      	// $this->Buttons[btnFinalize]->Control->value = "Finalize";
-      	// $this->Buttons[btnFinalize]->Icon->class = "glyphicon glyphicon-thumbs-up"; 
-
-      	// $counter = 1;
-	      // foreach($this->Buttons as $id => $control)
-	      // {
-       //   	$this->ToolBar->Buttons[$id]->Control = nCopy($control->Control);
-       //   	$this->ToolBar->Buttons[$id]->Control->id = $id;
-       //   	$this->ToolBar->Buttons[$id]->Control->name = "Action";
-       //   	$this->ToolBar->Buttons[$id]->Control->type = "submit";
-       //   	$this->ToolBar->Buttons[$id]->Control->tag = "input";
-
-       //   	$this->ToolBar->Buttons[$id]->Span = nCopy($control->Span);
-       //  	   $this->ToolBar->Buttons[$id]->Span->tag = "span";
-       //   	$this->ToolBar->Buttons[$id]->Span->title = $control->Control->value;
-
-       //   	$this->ToolBar->Buttons[$id]->blnShow = $control->blnShow;
-       //   	$this->ToolBar->Buttons[$id]->intOrder = $counter;
-
-       //   	$counter++;
-      	// }
-       //   //print_rr($this->ToolBar->Buttons);
-       //   $this->ToolBar->Label = $this->Entity->Name;
 
          $this->Buttons[btnUpload]->Control->class = "linkbutton";
          $this->Buttons[btnUpload]->Control->value = "Upload Invoice";
@@ -527,32 +360,6 @@
 		      	</div class=Logout>";
 	   }
 
-      // protected function ToolBar()
-      // {
-      //    $strToolBar= "
-	     //  	<div id='div-toolbar'>
-	     //     	<div class='pull-left'>
-		    //         <table style='margin-bottom:0px;'>
-		    //            <tr> 
-	     //              	<td align='center' style='border-right: 2px groove #1ab394; padding: 35px 100px 19px 15px;'>
-	     //              		<span class='text-muted'>".$this->ToolBar->Label."</span>
-	     //              	</td>
-	     //              	<td style='position: relative; border: 0px dashed orange; padding: 0px;'>
-	     //              		". $this->ToolBar->Block . $this->renderFilters() ."
-	     //              	</td>
-		    //            </tr>
-		    //         </table>
-	     //     	</div>
-	     //     	<div class='pull-right'>
-	     //        	". $this->renderToolbarButtons() ."
-	     //     	</div>
-	     //     	<div style='clear:both'></div>
-	     //  	</div>
-      // 	";
-      //    $this->ToolBar = $strToolBar;
-
-      //    return $this->ToolBar;
-      // }
 
       protected function ToolBar()
       {
@@ -572,7 +379,8 @@
                         </div>
                         <div style='clear:both;'></div>
                      </div>
-                  </div>";
+                  </div>
+         ";
       }
 
 
@@ -724,47 +532,6 @@
          $this->Pages[$this->SystemSettings[SCRIPT_NAME]]->PageNumber = $_SESSION[PAGES]->Entity[$this->SystemSettings[SCRIPT_NAME]]->Paging[PageNumber];
       }
 
-      // protected function renderFilters()
-      // {//note $this->Filters referst to the public Filters collection in the Child-Class, eg. Client->Filters
-      //    //print_rr($this->Pages[$this->SystemSettings[SCRIPT_NAME]]->Filters);
-      //    global $SP, $BR;
-      //    $strFilterControls = ""; 
-
-      //    	if(count($this->Filters)>0){
-      //       	$i = 0;
-      //       	foreach($this->Filters as $key => &$filter){
-      //          	$filter->ControlHTML = ZoriControl::renderControl($filter->tag, $filter->html);
-
-   	  //           if($filter->tag == "hidden")
-   	  //           {//20121204 - hiding hidden filter vars - pj
-   	  //              $strFilterControls .= $filter->ControlHTML;
-   	  //           }else{
-   	  //              if($i % 3 == 0 && $i != 0)
-   	  //              {
-   	  //                 $strFilterControls .= "</tr><tr>";
-   	  //              }
-   	  //              $strFilterControls .= "
-      //                   <td align=''>
-      //                      <label style='color:#000;' for=\"$key\" class='label'>$SP$SP". ZoriDetails::cleanColumnName($key) .":</label>
-      //                   </td>
-      //                   <td align=''>". $filter->ControlHTML ."</td>
-      //                ";
-   	  //              $i++;
-   	  //           }
-      //       	}
-
-      //       	$strFilterControls .= "
-      //          	<td rowspan=2 valign=middle align=center ></td>";
-
-   	  //        return "
-   	  //        	<table class='tblBlank' style='margin-bottom: 0px; padding-top:0px;'>
-   	  //        		<tr>$strFilterControls</tr>
-   	  //        	</table>
-      //         		</td>
-      //          	<td nowrap>$SP$SP<input style='background:#fff;' type=submit name='Action' id='btnFilter' class='btn btn-default' value='Filter'>
-      //           	$SP<input style='background:#fff;' type=submit name='Action' id='btnClear' class='btn btn-default' value='Clear'>"; //</td> ends outside in the calling function
-      //    	}
-      // }
 
       protected function renderFilters()
       {//note $this->Filters referst to the public Filters collection in the Child-Class, eg. Client->Filters
@@ -773,10 +540,10 @@
          include_once("_zori.control2.cls.php");
 
          global $SP, $BR, $_LANGUAGE, $_TRANSLATION;
-   //INI
          $strFilterControls = "";
-   //go:
-         if(count($this->Filters)>0){//
+
+         if(count($this->Filters)>0)
+         {//
             $i = 0;
             foreach($this->Filters as $key => &$filter)
             {
@@ -797,7 +564,7 @@
                   if($filter->label == "")
                      $filter->label = $key;
 
-   include_once("_framework/_zori.details2.cls.php");
+                  include_once("_framework/_zori.details2.cls.php");
                   $strFilterControls .= "
                      <div class='form-group'>
                         <label for=\"$key\" class='control-label col-xs-12'>". NemoDetails::cleanColumnName($filter->label) .":<b class='textColour' style='font-size: 20px;'></b></label>
@@ -809,7 +576,7 @@
 
 
 
-         //print_rr($this->Filters);
+               //print_rr($this->Filters);
                return " <!-- FILTER FIELD-->
 
                         $strFilterControls

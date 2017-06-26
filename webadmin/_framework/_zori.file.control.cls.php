@@ -2,13 +2,13 @@
 
 /**
   * Date: 2017/01/10
-    File Name: _nemo.file.control.cls.php
-    Class Name: NemoFileUploadControl
+    File Name: _Zori.file.control.cls.php
+    Class Name: ZoriFileUploadControl
     Author: Neil S
     Modify By: Gael Musikingala 10/02/2017
 */
 
-class NemoFileUploadControl extends NemoControl2
+class ZoriFileUploadControl extends ZoriControl2
 {
     //FILE UPLOAD CONTROL ATTRIBUTES
     public $strPath;

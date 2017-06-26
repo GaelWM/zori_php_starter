@@ -40,29 +40,37 @@
 			$this->controls = new ZoriControl();
 		}
 
-		public function  getHeader()
+		public function getHeader()
 		{
-			//ini
-			global $SystemSettings;
+			// //ini
+			// global $SystemSettings;
 
-			$this->HEADER =
-			"
-				<nav class='navbar-default pull-left'>
-					<button type='button' class='navbar-toggle collapsed' data-toggle='offcanvas' data-target='#sidenav' aria-expanded='false'>
-			        <span class='sr-only'>Toggle navigation</span>
-			        <span class='icon-bar'></span>
-			        <span class='icon-bar'></span>
-			        <span class='icon-bar'></span>
-				   </button>
-				</nav>
-				<div class='col-md-7'>
-					<ul class='pull-left'>
-						<li id='' class='' ><img src='' /></li>
-						<li id='welcome' class='' ><h4>".$SystemSettings[ProjectName]."</h4></li>
-					</ul>
-				</div>
-			";
-			return $this->HEADER;
+			// $this->HEADER =
+			// "
+			// 	<nav class='navbar-default pull-left'>
+			// 		<button type='button' class='navbar-toggle collapsed' data-toggle='offcanvas' data-target='#sidenav' aria-expanded='false'>
+			//         <span class='sr-only'>Toggle navigation</span>
+			//         <span class='icon-bar'></span>
+			//         <span class='icon-bar'></span>
+			//         <span class='icon-bar'></span>
+			// 	   </button>
+			// 	</nav>
+			// 	<div class='col-md-7'>
+			// 		<ul class='pull-left'>
+			// 			<li id='' class='' ><img src='' /></li>
+			// 			<li id='welcome' class='' ><h4>".$SystemSettings[ProjectName]."</h4></li>
+			// 		</ul>
+			// 	</div>
+			// ";
+			// return $this->HEADER;
+         $db = "";
+         if($this->SystemSettings[SERVER_NAME] == "localhost"){
+            global $DATABASE_SETTINGS;
+            $db = ": ". $DATABASE_SETTINGS[localhost]->database;
+         }
+
+         return "
+         <h1 style='font-size:26px; margin;10px !important;'>". $this->getBrand() ." $db </h1>";
 		}
 
 		public function Content($html){
@@ -102,6 +110,39 @@
             include " ".$index.".php ";
          }
 		}
+
+      public function Message($text=null)
+      {
+         if($text)
+            $this->Message->Text = $text;
+
+         switch($this->Message->class)
+         {
+            case "warning":
+            case "restricted":
+               $this->Message->class = "alert alert-warning alert-dismissible fade in";
+               break;
+            case "error":
+               $this->Message->class = "alert alert-danger alert-dismissible fade in";
+               break;
+            case "success":
+            case "good":
+               $this->Message->class = "alert alert-success alert-dismissible fade in";
+               break;
+            case "":
+               $this->Message->class = "alert alert-info alert-dismissible fade in";
+               break;
+         }
+
+         if($this->Message->Text != "")
+         return "
+   <div class='".$this->Message->class."' role='alert'>
+                <button type='button' class='close' data-dismiss='alert' aria-label='Close' style='position:relative; float:right; width: 40px;'><span aria-hidden='true'>×</span>
+                </button>
+                <strong >". $this->Message->Text ."</strong>
+               </div>
+         ";
+      }
 
    	protected function getMessage()// Types => (success,warning,info,error) GAEL
    	{
@@ -207,6 +248,11 @@
 
         return $JS;
    	}
+
+      function getBrand(){
+         global $SystemSettings;
+         return $SystemSettings[Brand];
+      }
 
 	}
 ?>

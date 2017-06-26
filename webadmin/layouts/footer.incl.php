@@ -132,25 +132,6 @@ echo "
          if(typeof chkSel === 'undefined') { chkSel = 'chkSelect'}
          $('input[id='+chkSel+']').attr('checked', blnListSelect);
       }
-
-      $(document).ready(function(){ 
-         var handleDataTableButtons = function(){
-            alert('test')
-           
-         };
-
-         TableManageButtons = function() {
-            'use strict';
-            return 
-            {
-               init: function() 
-               {
-                  handleDataTableButtons();
-               }
-            };
-         }();   
-       
-      });
     </script>
     <!-- /Datatables -->";
 

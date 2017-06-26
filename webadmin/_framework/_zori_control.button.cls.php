@@ -1,11 +1,11 @@
 <?php
 	/**
 	* 	Date: 25/01/2017
-		File Name: _nemo.control.button.cls.php
-		Class Name: NemoSlider
+		File Name: _Zori.control.button.cls.php
+		Class Name: ZoriSlider
 		Author: Gael Musikingala
 	*/
-	class NemoControlButton extends NemoControl2
+	class ZoriControlButton extends ZoriControl2
 	{
       public function __construct($proto)
 	   {//ini

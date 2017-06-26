@@ -4,7 +4,8 @@
 
    
    include_once("_framework/_zori.cls.php");
-   include_once("_framework/_zori.details.cls.php");
+   include_once("_framework/_zori.control2.php");
+   include_once("_framework/_zori.details2.cls.php");
    include_once("includes/user.cls.php");
 
    $page = new Zori();
@@ -82,8 +83,7 @@
                " ;
          //print_rr($page->ToolBar->Buttons);
          $page->renderControls();
-         $page->ContentLeft = $page->renderTable($page->ToolBar->Label) . $page->getJsNemoValidateSave($JS);
-         $page->ContentRight = $profilePic;
+         $page->ContentBootstrap[0]["col-md-6"] = $page->renderForm($page->ToolBar->Label) . $page->getJsZoriValidateSave($JS);
       break;
 
       default:
