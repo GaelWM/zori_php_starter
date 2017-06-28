@@ -1,6 +1,6 @@
 <?php
    include_once("_framework/_zori.cls.php");
-   include_once("_framework/_zori.details.cls.php");
+   include_once("_framework/_zori.details2.cls.php");
    include_once("includes/email.cls.php");
    include_once("_framework/_zori.email.cls.php");
 

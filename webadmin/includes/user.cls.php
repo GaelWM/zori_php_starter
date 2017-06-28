@@ -10,16 +10,16 @@ class User extends ZoriList
 
    public function __construct($DataKey)
    {
-      $this->Filters[frSearch]->tag = "input";
-      $this->Filters[frSearch]->html->value = "";
-      $this->Filters[frSearch]->html->class = "form-control input-sm";
+      $this->Filters[frSearch]->Type = "varchar";
+      $this->Filters[frSearch]->VALUE = "";
+      $this->Filters[frSearch]->Control->html->class = "form-control input-sm";
 
       //print_rr($this->Filters);
 
 
-      $this->Filters[frStatus]->tag = "select";
-      $this->Filters[frStatus]->html->value = "-1";
-      $this->Filters[frStatus]->html->class = "form-control input-sm";
+      $this->Filters[frStatus]->Type = "select";
+      $this->Filters[frStatus]->VALUE = "-1";
+      $this->Filters[frStatus]->Control->html->class = "form-control input-sm";
       $this->Filters[frStatus]->sql = "SELECT -1 AS ControlValue, '- All -' AS ControlText
                         UNION ALL
                         SELECT 1 AS ControlValue, 'Active' AS ControlText
@@ -33,13 +33,13 @@ class User extends ZoriList
 
    public function getList()
    {
-      if($this->Filters[frSearch]->html->value != "")
+      if($this->Filters[frSearch]->VALUE != "")
       {
          $like = "LIKE(". $this->db->qs("%".$this->Filters[frSearch]->html->value."%") .")";
          $Where .= " AND (sysUser.UserID $like OR sysUser.strUser $like OR sysUser.strEmail $like)";
       }
 
-      if($this->Filters[frStatus]->html->value != -1)
+      if($this->Filters[frStatus]->VALUE != -1)
       {
          $Where .= " AND sysUser.blnActive = ". $this->Filters[frStatus]->html->value;
       }
@@ -68,24 +68,11 @@ class User extends ZoriList
 
       $db->Fields[strLastUser] = $_SESSION['USER']->USERNAME;
 
+      //print_rr($db->Fields);die("dfuihu");
+
       if($UserID == 0){
          $db->Fields[strFirstUser] = $nemo->SystemSettings[USER]->USERNAME;
          $db->Fields[dtFirstEdit] = date("Y-m-d H:i:s");
-      }
-
-
-      //print_rr($_FILES);
-      if($_FILES['Profile:PicturePath']['name'] != "" && $UserID != 0)
-      {//current: cel_a/wa/_ need to go to cel_a/training/profilepictures/
-         chmod($_FILES['Profile:PicturePath']['tmp_name'] , 0777);
-         $strFileName = str_pad($UserID, 5,"0", STR_PAD_LEFT) ."_". $_FILES["Profile:PicturePath"]["name"];
-
-         $strPath = $SystemSettings[ProfileImageDirAdmin]; //$strPath = "../../profliepictures/";
-
-         $db->Fields["Profile:PicturePath"] = $strFileName;
-
-         move_uploaded_file($_FILES['Profile:PicturePath']['tmp_name'], $strPath . $strFileName);
-
       }
 
       $result = $db->Save();

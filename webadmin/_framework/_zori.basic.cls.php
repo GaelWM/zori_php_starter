@@ -42,27 +42,6 @@
 
 		public function getHeader()
 		{
-			// //ini
-			// global $SystemSettings;
-
-			// $this->HEADER =
-			// "
-			// 	<nav class='navbar-default pull-left'>
-			// 		<button type='button' class='navbar-toggle collapsed' data-toggle='offcanvas' data-target='#sidenav' aria-expanded='false'>
-			//         <span class='sr-only'>Toggle navigation</span>
-			//         <span class='icon-bar'></span>
-			//         <span class='icon-bar'></span>
-			//         <span class='icon-bar'></span>
-			// 	   </button>
-			// 	</nav>
-			// 	<div class='col-md-7'>
-			// 		<ul class='pull-left'>
-			// 			<li id='' class='' ><img src='' /></li>
-			// 			<li id='welcome' class='' ><h4>".$SystemSettings[ProjectName]."</h4></li>
-			// 		</ul>
-			// 	</div>
-			// ";
-			// return $this->HEADER;
          $db = "";
          if($this->SystemSettings[SERVER_NAME] == "localhost"){
             global $DATABASE_SETTINGS;
@@ -70,22 +49,55 @@
          }
 
          return "
-         <h1 style='font-size:26px; margin;10px !important;'>". $this->getBrand() ." $db </h1>";
+         <h1 style='font-size:26px; margin;10px !important;'>". $this->getBrand() ." ($db) </h1>";
 		}
 
 		public function Content($html){
 			$this->CONTENT .= $html;
 			return $this->CONTENT;
 		}
+
 		protected function ContentBox()
-	   	{
-	      return "
-	      	<div class='panel panel-default'>
-				<div class='panel-body zoriTableDiv'>
-					$this->Content
-				</div>
-			</div>";
-	   	}
+      {
+         if($this->Filters != "")
+         {
+            if(isset($this->ContentBootstrap_Filters)){//20170411 - zori filter columns - g
+               if($this->ContentBootstrap_Filters != "col-md-2"){
+                  $cbColumns = $this->ContentBootstrap_Filters;
+               }
+            }else{
+               $cbColumns = "col-md-2";
+            }
+               
+            $this->ContentBootstrap[-1][$cbColumns] = "  <div class='x_title' id='pageFilters'>
+                                                            <h2>Filters</h2>
+                                                            <div class='clearfix'></div>
+                                                         </div>
+                                                         <div class='x_content'>
+                                                            <p class='text-muted font-13 m-b-30'> <!-- ABILITY TO ADD EXPLANATION BELOW --></p>
+
+                                                            <div id='datatable-buttons' class=' '> </div>
+                                                            <div class='table-responsive'> ". $this->renderFilters() ." </div>
+                                                         </div>";
+         }
+         ksort($this->ContentBootstrap);
+         foreach($this->ContentBootstrap AS $Order => $arrVal)
+         {
+            foreach($arrVal AS $ColSize => $strContent)
+            {
+               ## 10022017 HAD TO ADD AN IF BECAUSE LOGIN PAGE HASE DIFFERENT STYLING THAN REST OF SITE(BASIC AND NORMAL IS DIFFERENT) 
+               if($this->SystemSettings[SCRIPT_NAME] == "login.php"){
+                  $content = $strContent;
+               }
+               else{
+                  $content .= "<div class='$ColSize'><div class='x_panel'>$strContent</div></div>";
+               }
+            }
+         }
+
+         $this->CONTENT .= $content;
+         return $this->CONTENT;
+      }
 
 		public function getFooter()
 		{

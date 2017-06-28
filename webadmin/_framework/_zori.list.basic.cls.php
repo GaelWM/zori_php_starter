@@ -256,7 +256,7 @@ class ZoriListBasic extends Zori
             if($selectKey != "[]")//failsafe
                eval("\$checked = \$$select;");
 
-            $chkSelect = "<input type=checkbox name='chkSelect$selectKey' id='chkSelect' value='checked' $checked>";
+            $chkSelect = "<input type=checkbox class='flat' name='chkSelect$selectKey' id='chkSelect' value='checked' $checked>";
             //var_dump($evalkey);die;
          }
          if(count($this->DataKey)>0)

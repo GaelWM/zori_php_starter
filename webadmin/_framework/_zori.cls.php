@@ -98,7 +98,8 @@
 
          if(isset($_SESSION[USER]->ID))
          {
-           $row = $xdb->getRowSQL("SELECT `Profile:PicturePath` AS ProfilePicture, strUser FROM sysUser WHERE UserID = " . $_SESSION[USER]->ID, 0);
+           $row = $xdb->getRowSQL("SELECT `Profile:PicturePath` AS ProfilePicture, strUser FROM sysUser 
+            WHERE UserID =".$_SESSION[USER]->ID, 0);
            $profilePicture = ($row->ProfilePicture == "" ? "blank.jpg" : $row->ProfilePicture);
            $userName = $row->strUser;
          }
@@ -466,16 +467,16 @@
          }}
       }
 
-      protected function iniFilters()
-      {  /*notes: filters have 2 stages. stage 1, iniFilters, executes onConstruct of the Zori. stage 2, renderFilters(), executes onDisplay() of Zori
+       protected function iniFilters()
+      {  /*notes: filters have 2 stages. stage 1, iniFilters, executes onConstruct of the Nemo. stage 2, renderFilters(), executes onDisplay() of Nemo
          *     : $this->Filters referst to the public Filters collection in the Child-Class, eg. Client->Filters
          *
          *
          */
-
+   //print_rr($_REQUEST);
          //save || delete session filters
-         if(($_REQUEST[Action] == "Filter" || $_POST[Action] == "Run Report") && count($this->Filters) >0 )
-         {//&& because $this->Filters doesn't have an ini value when $page = new Zori(), but has in $page = new Client() [extends Zori]
+         if(($_REQUEST[Action] == "Filter" || $_POST[Action] == "Run Report" || $_POST[Action] == "Search") && count($this->Filters) >0 )
+         {//&& because $this->Filters doesn't have an ini value when $page = new Nemo(), but has in $page = new Client() [extends Nemo]
             foreach($this->Filters as $key => &$filter)
             {
                $_SESSION[PAGES]->Entity[$this->SystemSettings[SCRIPT_NAME]]->Filters[$key] = $_REQUEST[$key];
@@ -501,13 +502,15 @@
          {
             $filter->html->name = $filter->html->id = $key;
             if($this->Pages[$this->SystemSettings[SCRIPT_NAME]]->Filters[$key] != ""){//load filter value from session
+               $filter->VALUE = $this->Pages[$this->SystemSettings[SCRIPT_NAME]]->Filters[$key];
                $filter->html->value = $this->Pages[$this->SystemSettings[SCRIPT_NAME]]->Filters[$key];
-               if($filter->html->type == "checkbox")
+               if($filter->Type == "checkbox")
                   $filter->html->checked = "checked";
             }
 
-            if($filter->tag == "select"){//load options from sql
-               $filter->html->innerHTML = $this->db->ListOptions($filter->sql, $filter->html->value);
+            if($filter->Type == "select"){//load options from sql
+               //echo $filter->sql;
+               $filter->html->innerHTML = $this->db->ListOptions($filter->sql, $filter->html->value, $filter->sqlGrouping);
             }
 
             //print_rr($this->Filters[$key]);
@@ -536,23 +539,22 @@
       protected function renderFilters()
       {//note $this->Filters referst to the public Filters collection in the Child-Class, eg. Client->Filters
          //print_rr($this->Pages[$this->SystemSettings[SCRIPT_NAME]]->Filters);
-         include_once("_zori.details.cls.php");
-         include_once("_zori.control2.cls.php");
+         include_once("_framework/_zori.details.cls.php");
+         include_once("_framework/_zori.control2.cls.php");
 
          global $SP, $BR, $_LANGUAGE, $_TRANSLATION;
          $strFilterControls = "";
 
          if(count($this->Filters)>0)
-         {//
+         {
             $i = 0;
             foreach($this->Filters as $key => &$filter)
             {
+               $zr = ZoriProtoControl::__new($filter->Type, $key, $filter->VALUE, $filter->html, $blnRequired=0, $isSelected=$filter->VALUE, $arrOptions=null, $filter->sql, $filter->sqlGrouping);
 
-               $nc = NemoProtoControl::__new($filter->Type, $key, $filter->VALUE, $filter->html, $blnRequired=0, $isSelected=$filter->VALUE, $arrOptions=null, $filter->sql, $filter->sqlGrouping);
-
-               if($nc->Type == "hidden")
-               {//20121204 - hiding hidden filter vars - pj
-                  $strFilterControls .= $nc->HTML;
+               if($zr->Type == "hidden")
+               {//20121204 - hiding hidden filter vars.
+                  $strFilterControls .= $zr->HTML;
                }else{
 
                   if($filter->label != "" && $_TRANSLATION[$_SESSION[USER]->LANGUAGE][$key] != "")
@@ -565,45 +567,44 @@
                      $filter->label = $key;
 
                   include_once("_framework/_zori.details2.cls.php");
+
                   $strFilterControls .= "
                      <div class='form-group'>
-                        <label for=\"$key\" class='control-label col-xs-12'>". NemoDetails::cleanColumnName($filter->label) .":<b class='textColour' style='font-size: 20px;'></b></label>
-                        <div class='col-xs-12'>". $nc->HTML ."</div>
+                        <label for=\"$key\" class='control-label col-xs-12'>". ZoriDetails::cleanColumnName($filter->label) .":<b class='textColour' style='font-size: 20px;'></b></label>
+                        <div class='col-xs-12'>". $zr->HTML ."</div>
                      </div> ";
                   $i++;
                }
             }
 
+            //print_rr($this->Filters);
+            return " <!-- FILTER FIELD-->
 
+                     $strFilterControls
 
-               //print_rr($this->Filters);
-               return " <!-- FILTER FIELD-->
+                     <!-- FILTER BUTTONS -->
 
-                        $strFilterControls
-
-                        <!-- FILTER BUTTONS -->
-
-                        <div class='form-group' >
-                           <div style='position:relative; float:left;'>
-                              <div class='col-xs-12' style='margin-top:10px;'>
-                                 <div class='fa fa-filter' style='position:absolute; color:#fff; top:10px; left:20px;'></div>
-                                 <input id='btnFilter' class='linkbutton btn btn-primary' style='padding:6px 12px 6px 30px;' value='Filter' name='Action' tag='input' type='submit'>
-                              </div>
+                     <div class='form-group' >
+                        <div style='position:relative; float:left;'>
+                           <div class='col-xs-12' style='margin-top:10px;'>
+                              <div class='fa fa-filter' style='position:absolute; color:#fff; top:10px; left:20px;'></div>
+                              <input id='btnFilter' class='linkbutton btn btn-primary' style='padding:6px 12px 6px 30px;' value='Filter' name='Action' tag='input' type='submit'>
                            </div>
+                        </div>
 
-                           <div style='position:relative; float:right;'>
-                              <div class='col-xs-12' style='margin-top:10px;'>
-                                 <div class='fa fa-close' style='position:absolute; color:#fff; top:10px; left:20px;'></div>
-                                 <input id='btnClear' class='linkbutton btn btn-dark' style='padding:6px 12px 6px 30px;' value='Clear' name='Action' tag='input' type='submit'>
-                              </div>
+                        <div style='position:relative; float:right;'>
+                           <div class='col-xs-12' style='margin-top:10px;'>
+                              <div class='fa fa-close' style='position:absolute; color:#fff; top:10px; left:20px;'></div>
+                              <input id='btnClear' class='linkbutton btn btn-dark' style='padding:6px 12px 6px 30px;' value='Clear' name='Action' tag='input' type='submit'>
                            </div>
-                           <div style='clear:both;'></div>
-                        </div> ";
+                        </div>
+                        <div style='clear:both;'></div>
+                     </div> ";
 
-               return "<table class='tblBlank' style='margin-bottom: 0px; padding-top:0px;'><tr>$strFilterControls</tr></table>
-                        </td>
-               <td nowrap><input style=' ' type=submit name='Action' id='btnFilter' class='controlButton' value='Filter'>
-                $SP<input style=' ' type=submit name='Action' id='btnClear' class='controlButton' value='Clear'>";
+            return "<table class='tblBlank' style='margin-bottom: 0px; padding-top:0px;'><tr>$strFilterControls</tr></table>
+                     </td>
+            <td nowrap><input style=' ' type=submit name='Action' id='btnFilter' class='controlButton' value='Filter'>
+             $SP<input style=' ' type=submit name='Action' id='btnClear' class='controlButton' value='Clear'>";
 
          }
       }

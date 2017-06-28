@@ -103,8 +103,7 @@ echo "
 
       <link href='../vendors/bootstrap-wysiwyg/css/style.css' rel='stylesheet'> 
 
-      <script src='js/jquery-ui-min/jquery-ui.min.js'></script>
-      <script src='js/jquery-1.10.2.min.js'></script>
+      <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
 
       <!-- selectize -->
       <link rel='stylesheet' type='text/css' src='https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.1/js/standalone/selectize.min.js' />

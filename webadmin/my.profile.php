@@ -1,6 +1,6 @@
 <?php
    include_once("_framework/_zori.cls.php");
-   include_once("_framework/_zori.details.cls.php");
+   include_once("_framework/_zori.details2.cls.php");
    include_once("includes/user.cls.php");
 
    $page = new Zori();
@@ -15,8 +15,6 @@
    $page = new ZoriDetails();
 
    $page->AssimulateTable("sysUser", $_SESSION[USER]->ID, "strUser");
-
-   unset($page->Fields["UserID"]);
 
    $page->Fields["refSecurityGroupID"]->Control->value = $xdb->getRowSQL("SELECT strSecurityGroup FROM sysSecurityGroup WHERE SecurityGroupID = '". $page->Fields["refSecurityGroupID"]->VALUE ."'")->strSecurityGroup;
    $page->Fields["refSecurityGroupID"]->Control->tag = "label";
@@ -122,9 +120,9 @@
 
    $page->renderControls();
 
-   $page->ContentLeft = $JS.$page->renderTable($page->ToolBar->Label);
-   $page->ContentRight = $profilePic;
-   // $page->ContentLeft = $page->renderTable($page->ToolBar->Label) . $page->getJsNemoValidateSave()
+   $page->ContentBootstrap[0]["col-md-6"] = $JS.$page->renderForm($page->ToolBar->Label);
+   $page->ContentBootstrap[1]["col-md-6"] = $profilePic;
+   // $page->ContentLeft = $page->renderTable($page->ToolBar->Label) . $page->getJsZoriValidateSave()
    //    ."<i>*Note that updating your email address or password will update your details in the celestis webadmin where the email address is an exact match!</i>";
 
    $page->Message->Text = $Message;
