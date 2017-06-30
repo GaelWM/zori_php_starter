@@ -1,6 +1,6 @@
 <?php
     include_once ("_framework/_zori.cls.php");
-    include_once ("_framework/_zori.details.cls.php");
+    include_once ("_framework/_zori.details2.cls.php");
     include_once ("includes/security.group.cls.php");
     
   	$page = new Zori("SECURITY GROUP");
@@ -26,18 +26,18 @@
         $page = new ZoriDetails();
         $page->Message->Text = $Message;
         $page->AssimulateTable("sysSecurityGroup", $SecurityGroupID);
-        $page->Fields["SecurityGroupID"]->Control->type = "hidden";
+        //$page->Fields["SecurityGroupID"]->Control->type = "hidden";
 
         $page->renderControls();
-        $page->ContentLeft = $page->renderTable($page->ToolBar->Label) . $page->getJsNemoValidateSave();
+        $page->ContentBootstrap[0]["col-md-3"] = $page->renderForm($page->ToolBar->Label) . $page->getJsZoriValidateSave();
 
         if($Action != "New")
-           $page->Content = SecurityGroup::getSecurityEntities($SecurityGroupID);
+          $page->ContentBootstrap[1]["col-md-9"] = SecurityGroup::getSecurityEntities($SecurityGroupID);
 
         break;
       default:
 	    $page = new SecurityGroup(array("SecurityGroupID"));
-	    $page->Content = $page->getList($SecurityGroupID);
+	    $page->ContentBootstrap[0]["col-md-10"] = $page->getList($SecurityGroupID);
    }
 
    $page->Display();

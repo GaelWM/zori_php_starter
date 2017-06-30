@@ -12,7 +12,7 @@ include_once("_framework/_zori.database2.cls.php");
 //20140717 - added RETURN_URL - maanie
 
 */
-class ZoriDetails extends Zori
+class xxZoriDetails extends Zori
 {
    //public $SystemSettings = array();
    public $ContentLeft;

@@ -62,13 +62,13 @@ class SecurityGroup extends ZoriList
                            <td nowrap><input class='controlText' type='text' name='strEntity[$row->MenuLevel2ID]' id='strEntity[$row->MenuLevel2ID]' value='$row->strEntity'></td>
                            <td align='center'><input class='controlText' type='text' name='strNotes[$row->MenuLevel2ID]' id='strNotes[$row->MenuLevel2ID]' value='$row->strNotes'></td>
                            <td nowrap align='center'><input class='controlText' type='text' style='width:60px;text-align:right' name='intOrder[$row->MenuLevel2ID]' id='intOrder[$row->MenuLevel2ID]' value='$row->intOrder'></td>
-                           <td nowrap align='center'><input type='checkbox' ".($row->blnMenuItem==1?"checked":"")." name='blnMenuItem[$row->MenuLevel2ID]' id='blnMenuItem[$row->MenuLevel2ID]' value='1'></td>
-                           <td nowrap align='center' style='border-right: 1px solid #9B9B9B;'><input type='checkbox' ".($row->blnDivider==1?"checked":"")." name='blnDivider[$row->MenuLevel2ID]' id='blnDivider[$row->MenuLevel2ID]' value='1'></td>
-                           <td nowrap align='center' style='border-left: 1px solid #9B9B9B;'><input type='checkbox' ".($rowSecurity->blnView==1?"checked":"")." name='blnView[$row->MenuLevel2ID]' id='blnView[$row->MenuLevel2ID]' value='1'></td>
-                           <td nowrap align='center'><input type='checkbox' ".($rowSecurity->blnNew==1?"checked":"")." name='blnNew[$row->MenuLevel2ID]' id='blnNew[$row->MenuLevel2ID]' value='1'></td>
-                           <td nowrap align='center'><input type='checkbox' ".($rowSecurity->blnSave==1?"checked":"")." name='blnSave[$row->MenuLevel2ID]' id='blnSave[$row->MenuLevel2ID]' value='1'></td>
-                           <td nowrap align='center'><input type='checkbox' ".($rowSecurity->blnDelete==1?"checked":"")." name='blnDelete[$row->MenuLevel2ID]' id='blnDelete[$row->MenuLevel2ID]' value='1'></td>
-                           <td nowrap align='center'><input type='checkbox' ".($rowSecurity->blnSpecial==1?"checked":"")." name='blnSpecial[$row->MenuLevel2ID]' id='blnSpecial[$row->MenuLevel2ID]' value='1'></td>
+                           <td nowrap align='center'><input type='checkbox' class='flat' ".($row->blnMenuItem==1?"checked":"")." name='blnMenuItem[$row->MenuLevel2ID]' id='blnMenuItem[$row->MenuLevel2ID]' value='1'></td>
+                           <td nowrap align='center' style='border-right: 1px solid #9B9B9B;'><input type='checkbox' ".($row->blnDivider==1?"checked":"")." name='blnDivider[$row->MenuLevel2ID]' id='blnDivider[$row->MenuLevel2ID]' value='1' class='flat'></td>
+                           <td nowrap align='center' style='border-left: 1px solid #9B9B9B;'><input type='checkbox' class='flat' ".($rowSecurity->blnView==1?"checked":"")." name='blnView[$row->MenuLevel2ID]' id='blnView[$row->MenuLevel2ID]' value='1'></td>
+                           <td nowrap align='center'><input type='checkbox' class='flat' ".($rowSecurity->blnNew==1?"checked":"")." name='blnNew[$row->MenuLevel2ID]' id='blnNew[$row->MenuLevel2ID]' value='1'></td>
+                           <td nowrap align='center'><input type='checkbox' class='flat' ".($rowSecurity->blnSave==1?"checked":"")." name='blnSave[$row->MenuLevel2ID]' id='blnSave[$row->MenuLevel2ID]' value='1'></td>
+                           <td nowrap align='center'><input type='checkbox' class='flat'  ".($rowSecurity->blnDelete==1?"checked":"")." name='blnDelete[$row->MenuLevel2ID]' id='blnDelete[$row->MenuLevel2ID]' value='1'></td>
+                           <td nowrap align='center'><input type='checkbox' class='flat' ".($rowSecurity->blnSpecial==1?"checked":"")." name='blnSpecial[$row->MenuLevel2ID]' id='blnSpecial[$row->MenuLevel2ID]' value='1'></td>
                         </tr>
                      ";
       }

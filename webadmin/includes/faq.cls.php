@@ -1,5 +1,5 @@
 <?php
-include_once("_framework/_zori.details.cls.php");
+include_once("_framework/_zori.details2.cls.php");
 include_once("_framework/_zori.list.cls.php");
 
 /*

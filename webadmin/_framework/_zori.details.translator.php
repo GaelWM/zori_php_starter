@@ -1,6 +1,6 @@
 <?php
 include_once("_framework/_zori.cls.php");
-include_once("_framework/_zori.details.cls.php");
+include_once("_framework/_zori.details2.cls.php");
 include_once("_framework/_zori.database2.cls.php");
 
 /* notes:

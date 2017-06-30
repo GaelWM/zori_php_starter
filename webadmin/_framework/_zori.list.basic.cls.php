@@ -1,9 +1,6 @@
 <?php
-//include_once("_nemo.basic.cls.php");
 /*
- * 20110621 - refined anchor tag click - pj
- * 20110621 - added field-type data-transforms - pj
- * 20140205 - add ->Data[$i][html] in order to render attributes in the data TR on renderList() - pj
+ * 20170626: Revamp zori - gael
  */
 include_once("systems.php");
 include_once("_framework/_zori.cls.php");
@@ -25,8 +22,7 @@ class ZoriListBasic extends Zori
    public $eval = "";
 
    private $arrEvalTinyint = array(0 => "No", 1 => "Yes");
-
-   //ok, all this class should do is pick up the sql statement and generate a data array and make a list view of it. no security-able interaction!
+   
    public function __construct()
    {
       parent::__construct();
@@ -45,7 +41,6 @@ class ZoriListBasic extends Zori
           * apply new limit
           *
           */
-
 
          $intLengthSQL = strlen($sql);
          $idxLimit = strrpos(strtolower($sql), "limit");
@@ -91,25 +86,67 @@ class ZoriListBasic extends Zori
             //}}
          }
          //override
+         switch($row->type)
+            {
+               default:
+                  $this->Fields[$row->name] = "";
+                  $this->FieldList[$i]->type = "text";
+                  break;
+            }
+
+         //20160511 - Inspect Column type and set list's styling based on that (much like in Zori.database) - christiaan/PJ
          switch($column->type)
          {
+            //case MYSQLI_TYPE_TINY:
             case "tinyint":
+               $column->html->align = "center";
+               $column->excel->align = "center";
+               break;
+
+            //numerics
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+            case 5:
+            case 8:
+            case 9:
+            case 16:
+            case 246:
+               $column->html->align = "right";
+               $column->excel->align = "right";
+               break;
+            case "string":
+            case 253:  //20150803 - Fixed issue with primary keys's being strings not saving correctly / fixed by adding string to the switch to check field types- christiaan
                $column->html->align = "left";
+               $column->excel->align = "left";
+               if($column->decimals != 0)
+                  $column->html->align = "right"; // could be a FORMAT()ed number
+                  $column->excel->align = "right";
+               break;
+            case "timestamp":
+            case 7: //
+               $column->html->align = "right";
+               $column->excel->align = "right";
                break;
             case "date":
+            case 10:
+            case 12:
                $column->html->align = "center";
+               $column->excel->align = "center";
                break;
          }
          //print_rr($column);
 
          //default
-         if($column->html->align == "")
-         {
-            if($column->numeric == 1)
-               $column->html->align = "right";
-            else
-               $column->html->align = "left";
-         }
+         // if($column->html->align == "")
+         // {
+         //    if($column->numeric == 1)
+         //       $column->html->align = "right";
+         //    else
+         //       $column->html->align = "left";
+         // }
 
          $column->idx = $i;
 
@@ -127,6 +164,7 @@ class ZoriListBasic extends Zori
 
       //$this->isSortable = 1;
    }
+
 
    public function ListDATA($arrData=null)
    {
@@ -160,9 +198,15 @@ class ZoriListBasic extends Zori
             }
          }
          if($this->Columns[$idx]->numeric == 1)
+         {
             $this->Columns[$idx]->html->align = "right";
+            $this->Columns[$idx]->excel->align = "right";
+         }
          else
+         {
             $this->Columns[$idx]->html->align = "left";
+            $this->Columns[$idx]->excel->align = "left";
+         }
       }
    }
 
@@ -212,7 +256,7 @@ class ZoriListBasic extends Zori
             if($selectKey != "[]")//failsafe
                eval("\$checked = \$$select;");
 
-            $chkSelect = "<input type=checkbox name='chkSelect$selectKey' id='chkSelect' value='checked' $checked>";
+            $chkSelect = "<input type=checkbox class='flat' name='chkSelect$selectKey' id='chkSelect' value='checked' $checked>";
             //var_dump($evalkey);die;
          }
          if(count($this->DataKey)>0)
@@ -225,8 +269,8 @@ class ZoriListBasic extends Zori
          foreach($this->Columns as $idxCol => $column)
          {
 //print_rr($column);
-            if($this->eval != "") eval($this->eval); // used in NemoList
-            if($column->eval != "") eval($column->eval); // used in NemoList
+            if($this->eval != "") eval($this->eval); // used in ZoriList
+            if($column->eval != "") eval($column->eval); // used in ZoriList
             //print_rr($column);die;
             $htmlAttr = ZoriControl::renderAttributes($column->html);
             $strList .= "<td $htmlAttr >". $row[$idxCol] ."</td>";

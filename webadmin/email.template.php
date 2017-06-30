@@ -2,7 +2,7 @@
    //2013-11-20 Added preview of related email template to template detail
    // 20160901 - update export - shorouq 
    include_once("_framework/_zori.cls.php");
-   include_once("_framework/_zori.details.cls.php");
+   include_once("_framework/_zori.details2.cls.php");
    include_once("includes/email.template.cls.php");
    include_once("includes/email.cls.php");
 
@@ -88,13 +88,13 @@
          }
 
          $page->renderControls();
-         $page->ContentLeft = $page->renderTable($page->ToolBar->Label)
-            . $page->getJsNemoValidateSave()
+         $page->ContentBootstrap[0]["col-md-6"] = $page->renderForm($page->ToolBar->Label)
+            . $page->getJsZoriValidateSave()
             . js("
 
                ");
 
-         $page->ContentRight = $preview;
+         $page->ContentBootstrap[1]["col-md-6"] = $preview;
          break;
       case "Export":
          /*header("Content-type: application/ms-excel");
@@ -112,7 +112,7 @@
          $page->Message->Text = $Message;
 
          $page->isPageable = 1;
-         $page->Content = $page->getList();
+         $page->ContentBootstrap[0]["col-md-10"] = $page->getList();
          break;
    }
 //print_rr($page);

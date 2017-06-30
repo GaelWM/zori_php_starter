@@ -4,7 +4,8 @@
 
    
    include_once("_framework/_zori.cls.php");
-   include_once("_framework/_zori.details.cls.php");
+   include_once("_framework/_zori.control2.php");
+   include_once("_framework/_zori.details2.cls.php");
    include_once("includes/user.cls.php");
 
    $page = new Zori();
@@ -31,65 +32,80 @@
       case "Save":
       case "Edit":
       case "New":
-         $page = new ZoriDetails();
+         $page = new ZoriDetails(array("Details","Profile Picture","Security"));
          $page->AssimulateTable("sysUser", $UserID, "strUser");
          //print_rr($page->Fields);
 
          $page->Fields["UserID"]->Control->type = "hidden";
-         $page->Fields["UserID"]->Control->comment = "";
          
          //Build strPassword Element
          $page->Fields["strPassword"] = nCopy($page->Fields["strPasswordMD5"]);
          $page->Fields["strPassword"]->Label = "New Password";
          $page->Fields["strPassword"]->COLUMN_NAME = "strPassword";
-         $page->Fields["strPassword"]->Control->name = "strPassword";
-         $page->Fields["strPassword"]->Control->id = "strPassword";
-         $page->Fields["strPassword"]->Control->value = "";
+         $page->Fields["strPassword"]->Control->html->name = "strPassword";
+         $page->Fields["strPassword"]->Control->html->id = "strPassword";
+         $page->Fields["strPassword"]->Control->html->value = "";
          $page->Fields["strPassword"]->jsValidate = "";
-         $page->Fields["strPassword"]->Control->tag = "input";
-         $page->Fields["strPassword"]->Control->type = "password";
-         $page->Fields["strPassword"]->Control->autocomplete = "off";
-         $page->Fields["strPassword"]->Control->class = "form-control input-sm";
-         $page->Fields["strPassword"]->Control->onchange = "if($('#strPassword').val() != $('#strPasswordConfirm').val() && $('#strPasswordConfirm').val() != ''){ alert('Passwords do not match.');}";
-         $page->Fields["strPassword"]->ControlHTML = "";
+         $page->Fields["strPassword"]->Type = "password";
+         $page->Fields["strPassword"]->Control->html->autocomplete = "off";
+         $page->Fields["strPassword"]->Control->html->class = "form-control input-sm";
+         $page->Fields["strPassword"]->Control->html->onchange = "if($('#strPassword').val() != $('#strPasswordConfirm').val() && $('#strPasswordConfirm').val() != ''){ alert('Passwords do not match.');}";
          $page->Fields["strPassword"]->ORDINAL_POSITION = $page->Fields["strEmail"]->ORDINAL_POSITION +0.1;
+         $page->Fields["strPassword"]->Tab ="Security";
 
          //Build strPasswordConfirm Element
          $page->Fields["strPasswordConfirm"] = nCopy($page->Fields["strPassword"]);
          $page->Fields["strPasswordConfirm"]->Label = "Confirm Password";
          $page->Fields["strPasswordConfirm"]->COLUMN_NAME = "strPasswordConfirm";
-         $page->Fields["strPasswordConfirm"]->Control->name = "strPasswordConfirm";
-         $page->Fields["strPasswordConfirm"]->Control->id = "strPasswordConfirm";
-         $page->Fields["strPasswordConfirm"]->Control->onchange = "if($('#strPassword').val() != $('#strPasswordConfirm').val() && $('#strPassword').val() != ''){ alert('Passwords do not match.');}";
+         $page->Fields["strPasswordConfirm"]->Control->html->name = "strPasswordConfirm";
+         $page->Fields["strPasswordConfirm"]->Control->html->id = "strPasswordConfirm";
+         $page->Fields["strPasswordConfirm"]->Control->html->onchange = "if($('#strPassword').val() != $('#strPasswordConfirm').val() && $('#strPassword').val() != ''){ alert('Passwords do not match.');}";
          $page->Fields["strPasswordConfirm"]->ORDINAL_POSITION = $page->Fields["strEmail"]->ORDINAL_POSITION +0.2;
+         $page->Fields["strPasswordConfirm"]->Tab ="Security";
 
          $page->Fields["strPasswordMD5"]->jsValidate = "";
-         $page->Fields["strPasswordMD5"]->Control->type = "hidden";
-  
-         $page->Fields["Profile:PicturePath"]->Control->type = "file";
-         $page->Fields["Profile:PicturePath"]->Control->class = "btn btn-default btn-file";
-         $page->Fields["Profile:PicturePath"]->jsValidate = "";
+         $page->Fields["strPasswordMD5"]->Type = "hidden";
 
-         $profilePic = "
-         <div class = 'thumbnail ' style='width:350px; height:250px;'>
-            <img src = '". $page->SystemSettings[ProfileImageDirAdmin].$page->Fields["Profile:PicturePath"]->VALUE ."' title='". $page->Fields["strDisplayName"]->VALUE ."' target=_blank onLoad='positionProfilePic(this);' />
-         </div>";
+         $page->Fields["strSetting:Language"]->Tab = "Security";
+         $page->Fields["strSetting:Language"]->Type = "select";
 
-         $JS =  "if( $('#strPassword').val() != $('#strPasswordConfirm').val())
-                  { 
-                     msg += '\\nNew password and confirm password (do not match)'; 
-                  }
-               " ;
-         //print_rr($page->ToolBar->Buttons);
+
+         $page->Fields["refSecurityGroupID"]->Tab =
+         $page->Fields["strUser"]->Tab =
+         $page->Fields["strEmail"]->Tab =
+         $page->Fields["blnActive"]->Tab =
+         $page->Fields["strTel"]->Tab =
+         $page->Fields["strFirstUser"]->Tab =
+         $page->Fields["dtFirstEdit"]->Tab ="Details";
+
+         ## ALL THE FIELDS UNDER Profile Picture TAB
+         $page->Fields["Profile:PicturePath"]->Label = "Profile Picture";
+         $page->Fields["Profile:PicturePath"]->Type="file";
+         $page->Fields["Profile:PicturePath"]->ID =
+         $page->Fields["Profile:PicturePath"]->Name = $UserID;
+         $page->Fields["Profile:PicturePath"]->ajaxFunction = "UploadProfilePicture";
+         $page->Fields["Profile:PicturePath"]->strPath = $page->SystemSettings["ProfileImageDirAdmin"];
+         $page->Fields["Profile:PicturePath"]->ajaxParams = "&UserID=". $UserID;
+         $page->Fields["Profile:PicturePath"]->Tab = "Profile Picture";
+
+         unset($page->Fields["dtFirstEdit"]);
+         unset($page->Fields["strFirstUser"]);
+
          $page->renderControls();
-         $page->ContentLeft = $page->renderTable($page->ToolBar->Label) . $page->getJsNemoValidateSave($JS);
-         $page->ContentRight = $profilePic;
+         $page->ContentBootstrap[0]["col-md-6"] = $page->renderTabs($page->ToolBar->Label) . $page->getJsZoriValidateSave($JS);
+      break;
+
+      case "Export":
+         $page = new User("");
+         $page->isPageable = 0;
+         $page->Content = $page->getList();
+         $page->renderExcel($page->Entity->Name);
       break;
 
       default:
          $page = new User(array("UserID"));
          $page->isPageable = 1;
-         $page->Content = $page->getList();
+         $page->ContentBootstrap[0]["col-md-10"] = $page->getList();
          break;
    }
 

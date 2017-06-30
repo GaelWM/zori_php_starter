@@ -10,7 +10,7 @@ class CreateFile
 
     private $fileName = "NelsonTest";
     private $ext = "php";
-    private $path = 'C:\xampp\htdocs\createFie';
+    private $path = 'zori_php_stater/webadmin/createFie';
     private $myfile;
     private $tabString;
     private $indentationLevelZero = 0;
