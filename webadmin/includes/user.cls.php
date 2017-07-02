@@ -135,11 +135,11 @@ class User extends ZoriList
       global $xdb;
       //print_rr($chkSelect);
       if(count($chkSelect) > 0){
-      foreach($chkSelect as $key => $value)
-      {
-         //$xdb->doQuery("DELETE FROM sysUser WHERE UserID = ". $xdb->qs($key));
-         $xdb->doQuery("UPDATE sysUser SET blnActive = 0 WHERE UserID = ". $xdb->qs($key));
-      }
+          foreach($chkSelect as $key => $value)
+          {
+             //$xdb->doQuery("DELETE FROM sysUser WHERE UserID = ". $xdb->qs($key));
+             $xdb->doQuery("UPDATE sysUser SET blnActive = 0 WHERE UserID = ". $xdb->qs($key));
+          }
          return "Records Deleted. ";
       }
    }

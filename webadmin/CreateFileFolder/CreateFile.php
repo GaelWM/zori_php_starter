@@ -8,20 +8,27 @@
 class CreateFile
 {
 
+
     private $fileName = "NelsonTest";
     private $ext = "php";
-    private $path = 'zori_php_stater/webadmin/createFie';
+   // private $path = 'webadmin/CreateFileFolder';
+    //private $path =
     private $myfile;
     private $tabString;
     private $indentationLevelZero = 0;
     private $indentationLevelOne = 4;
     private $indentationLevelTwo = 8;
+    private $indentationLevelThree = 12;
+    private $indentationLevelFour = 16;
+
 
     public function __construct()
     {
-        if ($this->validatePath($this->path))
+        $path = getcwd();
+        //$path = chdir('webadmin/CreateFileFolder');
+        if ($this->validatePath($path))
         {
-            $this->createFile($this->path, $this->fileName, $this->ext);
+            $this->createFile($path, $this->fileName, $this->ext);
             echo 'File created';
         }
 
@@ -29,7 +36,6 @@ class CreateFile
         $this->writeToFile("<?php");
 
         // includes
-        $this->writeToFile("include_once('_framework/_zori.list.cls.php');");
         $this->writeToFile("include_once('_framework/_zori.list.cls.php');");
         $this->spaceBetweenLines(1);
 
@@ -55,12 +61,39 @@ class CreateFile
 
         /* Save Function */
         $this->writeToFile("// Save function");
-        $this->writeToFile("public function save" . $this->fileName . "()");
+        $this->writeToFile("public static function save" . $this->fileName . "(&$"."UserID)");
         $this->openCurlyBracket();
         $this->tabing($this->indentationLevelTwo);
 
         // save functionality
-        $this->writeToFile("// You can write functionality code here");
+        $this->writeToFile("global $" . "xdb, $"."SystemSettings;");
+        $this->writeToFile("$". "db = new ZoriDatabase(\"sysUser\", $". "UserID, null, 0);");
+        $this->writeToFile("$". "xdb = nCopy($". "db);");
+        $this->writeToFile("$"."db->SetValues($"."_POST);");
+        $this->writeToFile("$"."db->Fields[strPasswordMD5] = md5($"."_POST[strPassword]);");
+        $this->writeToFile("$"."db->Fields[strLastUser] = $"."_SESSION['USER']->USERNAME;");
+        $this->writeToFile("if($"."UserID == 0)");
+        $this->openCurlyBracket();
+        $this->tabing($this->indentationLevelThree);
+        $this->writeToFile("$"."db->Fields[strFirstUser] = $"."nemo->SystemSettings[USER]->USERNAME;");
+        $this->writeToFile("$"."db->Fields[dtFirstEdit] = date(\"Y-m-d H:i:s\");");
+        $this->tabing($this->indentationLevelTwo);
+        $this->closeCurlyBracket();
+
+        $this->writeToFile("$"."result = $"."db->Save();");
+        $this->writeToFile("if($"."UserID == 0) $"."UserID = $"."db->ID[UserID];");
+        $this->writeToFile("if($"."result->Error == 1)");
+        $this->openCurlyBracket();
+        $this->tabing($this->indentationLevelThree);
+        $this->writeToFile("return $"."result->Message;");
+        $this->tabing($this->indentationLevelTwo);
+        $this->closeCurlyBracket();
+        $this->writeToFile("else");
+        $this->openCurlyBracket();
+        $this->tabing($this->indentationLevelThree);
+        $this->writeToFile("return \"Details Saved.\";");
+        $this->tabing($this->indentationLevelTwo);
+        $this->closeCurlyBracket();
 
         $this->tabing($this->indentationLevelOne);
         $this->closeCurlyBracket();
@@ -69,12 +102,27 @@ class CreateFile
 
         /* Delete Function */
         $this->writeToFile("// Delete Function");
-        $this->writeToFile("public function delete" . $this->fileName . "()");
+        $this->writeToFile("public static function delete" . $this->fileName . "($"."chkSelect)");
         $this->openCurlyBracket();
         $this->tabing($this->indentationLevelTwo);
 
         // Delete functionality
         $this->writeToFile("// You can write functionality code here");
+        $this->writeToFile("global $"."xdb;");
+        $this->writeToFile("if(count($"."chkSelect) > 0)");
+        $this->openCurlyBracket();
+        $this->tabing($this->indentationLevelThree);
+        $this->writeToFile(" foreach($"."chkSelect as $"."key => $"."value)");
+        $this->openCurlyBracket();
+        $this->tabing($this->indentationLevelFour);
+        $this->writeToFile("");
+        $this->writeToFile("$"."xdb->doQuery(\"UPDATE sysUser SET blnActive = 0 WHERE UserID = \". $"."xdb->qs($"."key));");
+        $this->tabing($this->indentationLevelThree);
+        $this->closeCurlyBracket();
+        $this->writeToFile("return \"Records Deleted. \";");
+        $this->tabing($this->indentationLevelTwo);
+        $this->closeCurlyBracket();
+
 
         $this->tabing($this->indentationLevelOne);
         $this->closeCurlyBracket();
@@ -83,12 +131,20 @@ class CreateFile
 
         /* Update function */
         $this->writeToFile("// Update Function");
-        $this->writeToFile("public function update" . $this->fileName . "()");
+        $this->writeToFile("public static function update" . $this->fileName . "()");
         $this->openCurlyBracket();
         $this->tabing($this->indentationLevelTwo);
 
         // Update functionality
         $this->writeToFile("// You can write functionality code here");
+        $this->writeToFile("");
+        $this->writeToFile("");
+        $this->writeToFile("");
+        $this->writeToFile("");
+        $this->writeToFile("");
+        $this->writeToFile("");
+        $this->writeToFile("");
+        $this->writeToFile("");
 
         $this->tabing($this->indentationLevelOne);
         $this->closeCurlyBracket();
@@ -97,7 +153,7 @@ class CreateFile
 
         /* View function */
         $this->writeToFile("// view Function");
-        $this->writeToFile("public function view" . $this->fileName . "()");
+        $this->writeToFile("public static function view" . $this->fileName . "()");
         $this->openCurlyBracket();
         $this->tabing($this->indentationLevelTwo);
 
@@ -115,7 +171,7 @@ class CreateFile
 
 
 
-        echo "<br><strong>I Wrote a lot </strong> nneeehhhh..... <br> Check path: ' " . $this->path . "' for the file";
+        echo "<br><strong>I Wrote a lot </strong> nneeehhhh..... <br> Check path: ' " . $path . "' for the file";
     }
 
     private function tabing($num)
