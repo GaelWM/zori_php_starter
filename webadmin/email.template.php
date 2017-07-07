@@ -6,7 +6,7 @@
    include_once("includes/email.template.cls.php");
    include_once("includes/email.cls.php");
 
-
+//print_rr($_POST);
    $page = new Zori();
 //events
    switch($Action)
@@ -53,7 +53,8 @@
          $page->Fields["refCourseTypeID"]->ORDINAL_POSITION ++;
 
          $page->Fields["strSubject"]->Control->class .= " controlWideMax";
-         $page->Fields["txtBody"]->Control->style = "height: 350px; width:350px;";
+         $page->Fields["txtBody"]->Type = "richtext";
+         //$page->Fields["txtBody"]->Control->style = "height: 350px; width:350px;";
 
          $page->Fields["arrSubstitutions"]->ORDINAL_POSITION -= 1;
          $page->Fields["arrSubstitutions"]->Control->style = "display: none;";
@@ -88,13 +89,13 @@
          }
 
          $page->renderControls();
-         $page->ContentBootstrap[0]["col-md-6"] = $page->renderForm($page->ToolBar->Label)
+         $page->ContentBootstrap[0]["col-md-6 col-xs-12"] = $page->renderForm($page->ToolBar->Label)
             . $page->getJsZoriValidateSave()
             . js("
 
                ");
 
-         $page->ContentBootstrap[1]["col-md-6"] = $preview;
+         $page->ContentBootstrap[1]["col-md-4 col-xs-12"] .= $preview;
          break;
       case "Export":
          /*header("Content-type: application/ms-excel");

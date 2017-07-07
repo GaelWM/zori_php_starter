@@ -17,14 +17,14 @@ class EmailTemplate extends ZoriList
    public function __construct($DataKey)
    {
       //filters //2013-11-20 - added Filters for Search, type, Course type, status -christiaan
-      $this->Filters["frSearch"]->tag = "input";
-      $this->Filters[frSearch]->html->value = "";
-      $this->Filters[frSearch]->html->type = "text";
-      $this->Filters[frSearch]->html->class = "controlText";
+      $this->Filters[frSearch]->Type = "varchar";
+      $this->Filters[frSearch]->VALUE = "";
+      $this->Filters[frSearch]->Control->html->type = "text";
+      $this->Filters[frSearch]->Control->html->class = "controlText";
 
-      $this->Filters[frStatus]->tag = "select";
-      $this->Filters[frStatus]->html->value = "1";
-      $this->Filters[frStatus]->html->class = "controlText";
+      $this->Filters[frStatus]->Type = "select";
+      $this->Filters[frStatus]->VALUE = "-1";
+      $this->Filters[frStatus]->Control->html->class = "controlText";
       $this->Filters[frStatus]->sql = "SELECT -1 AS ControlValue, '- All -' AS ControlText
                         UNION ALL
                         SELECT 1 AS ControlValue, 'Active' AS ControlText
@@ -45,13 +45,13 @@ class EmailTemplate extends ZoriList
       //2013-11-20 - added Filters for Search, type, Course type, status -christiaan
       $Where = "";
 
-      if($this->Filters[frSearch]->html->value != "")
+      if($this->Filters[frSearch]->VALUE != "")
       {
          $like = "LIKE(". $this->db->qs("%".$this->Filters[frSearch]->html->value."%") .")";
          $Where .= " AND (tblEmailTemplate.strEmailTemplate $like OR tblEmailTemplate.strSubject $like OR tblEmailTemplate.txtBody $like  OR tblEmailTemplate.txtNotes $like)";
       }
     
-      if($this->Filters[frStatus]->html->value != -1)
+      if($this->Filters[frStatus]->VALUE != -1)
       {
          $Where .= " AND tblEmailTemplate.blnActive = ". $this->Filters[frStatus]->html->value;
       }
