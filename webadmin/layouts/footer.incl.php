@@ -127,8 +127,7 @@ echo "
       
       function jsToggleSelect(chkSel)
       {
-        alert('test');
-         blnListSelect = !blnListSelect;
+         var blnListSelect = !blnListSelect;
          if(typeof chkSel === 'undefined') { chkSel = 'chkSelect'}
          $('input[id='+chkSel+']').attr('checked', blnListSelect);
       }

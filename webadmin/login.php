@@ -1,6 +1,7 @@
 <?php
 	include_once ("_framework/_zori.basic.cls.php");
 
+	//print_rr($_POST);
 	$Action = $_POST["Action"];// Override the Action on the session.
 	unset($_SESSION[USER]);
 	$page = new ZoriBasic();

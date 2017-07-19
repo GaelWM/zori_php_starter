@@ -225,10 +225,10 @@ class ZoriListBasic extends Zori
       {
          $htmlAttr = ZoriControl::renderAttributes($column->Header->html);
          if($this->isSortable)
-            $strSort = "class='' onclick=\"window.location.href='?srtNew=$column->name&srtCurrent=".$srtArg[srtCurrent]."&srtDir=".$srtArg[srtDir]."'\"";
+            $strSort = "class='linkbutton2 textColour sorting' onclick=\"window.location.href='?srtNew=$column->name&srtCurrent=".$srtArg[srtCurrent]."&srtDir=".$srtArg[srtDir]."'\"";
          $strList .= "<th $htmlAttr $strSort>$column->name</th>";
       }
-      if(count($this->DataKey)>0 && $this->isSelectable == 1) $strList .= "<th width='1%' class='linkbutton2 textColour' onclick='jsToggleSelect();'>Select</th>";
+      if(count($this->DataKey)>0 && $this->isSelectable == 1) $strList .= "<th width='1%' class='linkbutton2 textColour' ><input type='checkbox' id='check-all' class='flat'></th>";
       $strList .= "</tr>";
 
       if($this->isPageable == 1 && $this->SystemSettings["PageSize"] > 0)
@@ -256,7 +256,7 @@ class ZoriListBasic extends Zori
             if($selectKey != "[]")//failsafe
                eval("\$checked = \$$select;");
 
-            $chkSelect = "<input type=checkbox class='flat' name='chkSelect$selectKey' id='chkSelect' value='checked' $checked>";
+            $chkSelect = "<input type='checkbox' class='flat' name='chkSelect$selectKey' value='checked' > ";
             //var_dump($evalkey);die;
          }
          if(count($this->DataKey)>0)
@@ -264,25 +264,30 @@ class ZoriListBasic extends Zori
             $a1 = "<a id='a[$i]' href=\"?Action=Edit$evalkey\" target=_blank>";
             $a2 = "</a>";
          }
-         $strList .= "<tr ". ZoriControl::renderAttributes($row[html]) ."><td align='right' class='tdCount textColour'>$a1$i$a2</td>"; //20140205 - add ->Data[$i][html] in order to render attributes in the data TR on renderList() - pj
+         $strList .= "<tr ". ZoriControl::renderAttributes($row[html]) ."><td style='' align='right' class='tdCount textColour'>$a1$i$a2</td>"; //20140205 - add ->Data[$i][html] in order to render attributes in the data TR on renderList() - pj
 
          foreach($this->Columns as $idxCol => $column)
          {
 //print_rr($column);
-            if($this->eval != "") eval($this->eval); // used in ZoriList
-            if($column->eval != "") eval($column->eval); // used in ZoriList
+            if($this->eval != "") eval($this->eval); // used in NemoList
+            if($column->eval != "") eval($column->eval); // used in NemoList
             //print_rr($column);die;
             $htmlAttr = ZoriControl::renderAttributes($column->html);
             $strList .= "<td $htmlAttr >". $row[$idxCol] ."</td>";
          }
-         if(count($this->DataKey)>0 && $this->isSelectable == 1) $strList .= "</td><td align=center>$chkSelect";
-         $strList .= "</td></tr>";
+
+         if(count($this->DataKey)>0 && $this->isSelectable == 1)
+         {
+            $strList .= "<td align=center>$chkSelect</td>";
+         }
+         $strList .= "</tr>";
          $i++;
 //break;
       }}
       //print_rr($this);die;
       return $strList;
    }
+
 
    public function renderTable($strCaption="", $tableHTML=null)
    {

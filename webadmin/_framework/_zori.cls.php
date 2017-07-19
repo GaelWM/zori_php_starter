@@ -113,7 +113,8 @@
                <nav>
                  <div style='position:relative; float:left; width:40px !important; padding-top:10px;' class='nav toggle'> <a id='menu_toggle' onClick='jsHideMenu();'><i class='fa fa-bars'></i></a>  </div>
                  <div style='position:relative; float:left; width:100px !important; padding-top:10px;' class='nav toggle'> <a id='menu_toggle' onClick='jsHideFilters();'><i style='font-size:20px; padding:2px;' class='fa fa-filter'></i>Filters</a> </div>
-
+                  <div style='position:relative; width:300px !important; padding-top:10px;' class='nav toggle'><p style='font-size:16px; padding:2px;'> Welcome to ".$this->getBrand()."</p> </div>
+                 
                  <ul class='nav navbar-nav navbar-right'>
                    <li class=''>
                      <a href='javascript:;' class='user-profile dropdown-toggle' data-toggle='dropdown' aria-expanded='false'>
