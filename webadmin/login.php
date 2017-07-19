@@ -64,39 +64,34 @@
 	//page start
 
 	//$page->getMessage($M,$T);
-	$page->Content= "
-	   <div class='panel-heading'>
-	      <div class='panel-title'>Sign In</div>
-	      <div style='float:right; font-size: 80%; position: relative; top:-10px'>
-	         <a href='#'>Forgot password?</a>
-	      </div>
-	   </div>
+	$page->CONTENT= "
 
-	   <div style='border-bottom: 1px solid #2f4050'></div>   
-	   <div style='padding-top:30px' class='panel-body' >           
-	      <div id='loginform' class='form-horizontal' role='form'>       
-	         <div style='margin-bottom: 25px' class='input-group'>
-	            <span class='input-group-addon'><i class='glyphicon glyphicon-user'></i></span>
-	            <input id='strUsername' type='text' class='form-control' name='strUsername' placeholder='Email Address'>                                        
-	         </div>
-	         <div style='margin-bottom: 25px' class='input-group'>
-	            <span class='input-group-addon'><i class='glyphicon glyphicon-lock'></i></span>
-	            <input id='strPassword' type='password' class='form-control' name='strPassword' placeholder='Password'>
-	         </div> 
-	         <div class='input-group'>
-	          <div class='checkbox'>
-	           <label>
-	            <input id='login-remember' type='checkbox' name='remember' value='1'> Remember me
-	         </label>
-	      </div>
-	   </div>
-	   <div style='margin-top:10px' class='form-group'>
-	      <div class='col-sm-12 controls'>
-	       	<input type='submit' id='btnLogin' name='Action' value='Login' class='btn btn-success' />
-	    	</div>
-	 	</div>
-	</div>
-	</div>
+		   <div style='padding:15px;' class='panel center-div'> 
+		   	<h1 class='text-center' style='font-family: Pacifico;'>".$page->getBrand()."</h1><div style='border-bottom:2px solid #34495e;'></div><br>
+		      <div id='loginform' class='form-horizontal' role='form'>       
+		         <div style='margin-bottom: 25px' class='input-group'>
+		            <span class='input-group-addon'><i class='glyphicon glyphicon-user'></i></span>
+		            <input id='strUsername' type='text' class='form-control' name='strUsername' placeholder='Email Address'>                                        
+		         </div>
+		         <div style='margin-bottom: 25px' class='input-group'>
+		            <span class='input-group-addon'><i class='glyphicon glyphicon-lock'></i></span>
+		            <input id='strPassword' type='password' class='form-control' name='strPassword' placeholder='Password'>
+		         </div> 
+		         <div class='input-group pull-left'>
+			         <div class='checkbox'>
+			           <label> <input id='login-remember' type='checkbox' name='remember' value='1'> Remember me </label> 
+			         </div>
+		   		</div>
+		   		<a class='pull-right' href='#'>Forgot password?</a><br>
+		   	</div>
+			   <div style='margin-top:10px' class='form-group'>
+			      <div class='col-sm-12 controls'>
+			       	<input type='submit' id='btnLogin' name='Action' value='Login' class='btn btn-success' />
+			    	</div>
+			 	</div>
+			</div>
+		</div>
+	
 
 	".js("
 

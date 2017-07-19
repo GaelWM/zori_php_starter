@@ -64,10 +64,8 @@
    $page->Fields["Profile:PicturePath"]->Control->class = "controlText controlFile";
    $page->Fields["Profile:PicturePath"]->jsValidate = "";
 
-   $profilePic = "
-      <div class = 'thumbnail ' style='width:350px; height:250px;'>
-         <img src = '". $page->SystemSettings[ProfileImageDirAdmin].$page->Fields["Profile:PicturePath"]->VALUE ."' title='". $page->Fields["strDisplayName"]->VALUE ."' target=_blank />
-      </div>";//onLoad='positionProfilePic(this)';
+   $profilePic = "<img src = '". $page->SystemSettings[ProfileImageDirAdmin].$page->Fields["Profile:PicturePath"]->VALUE ."' title='". $page->Fields["strDisplayName"]->VALUE ."' target=_blank />
+      ";//onLoad='positionProfilePic(this)';
 
    $JS = js("
       function jsValidateCustom()
@@ -121,7 +119,7 @@
    $page->renderControls();
 
    $page->ContentBootstrap[0]["col-md-6"] = $JS.$page->renderForm($page->ToolBar->Label);
-   $page->ContentBootstrap[1]["col-md-6"] = $profilePic;
+   $page->ContentBootstrap[1]["col-md-2"] = $profilePic;
    // $page->ContentLeft = $page->renderTable($page->ToolBar->Label) . $page->getJsZoriValidateSave()
    //    ."<i>*Note that updating your email address or password will update your details in the celestis webadmin where the email address is an exact match!</i>";
 

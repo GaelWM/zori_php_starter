@@ -1,6 +1,8 @@
 <?php
 
 //20170121 - new - pj
+//20170710: Added this to stop the Zoriprocontrol to override the name on the details. Gael.
+//201700711 Removed the initial value on post. - Gael
 
 include ("_framework/_zori.control.slider.cls.php");
 include ("_framework/_zori.file.control.cls.php");
@@ -41,6 +43,12 @@ abstract class ZoriControl2
       $this->Type = $Type;
       $this->ID =
       $this->Name = $ID;
+
+      //20170710: Added this to stop the Zoriprocontrol to override the name on the details. Gael.
+      if($Type == "selectMultiple"){
+         $this->Name = $ID."[]";
+      }
+
       $this->VALUE = $Value;
 
       $this->sql = $sql;
@@ -75,7 +83,7 @@ abstract class ZoriControl2
             $proto->html->value = "checked";
 
             if($proto->Type == "switch"){
-               $proto->html->value = "on";
+               //$proto->html->value = ""; 201700711 Removed the initial value on post. - Gael
                $proto->html->class = str_replace(" js-switch ", "", $proto->html->class). " js-switch ";
             }
             else{
@@ -166,6 +174,7 @@ abstract class ZoriControl2
 
          case "selectMultiple":
             $proto->html->value = $proto->VALUE;
+            $proto->html->multiple = "multiple";
 
             $proto->html->class = str_replace(" select2_multiple form-control ", "", $proto->html->class). " select2_multiple form-control ";
 
@@ -303,7 +312,7 @@ abstract class ZoriControl2
             //case "placeholder": //dont render placeholder inside a control
 
             default:
-               $htmlAttr .= " ". $attr ."='".qs($value)."'";
+            $htmlAttr .= " $attr = \"".qs($value)."\"";
          }
       }}
       return $htmlAttr;
@@ -495,16 +504,11 @@ class ZoriCheckboxControl extends ZoriControl2
       $this->html->id = $this->ID;
       $this->html->name = $this->Name;
 
-      
       $checked = ($this->VALUE == "checked" || $this->VALUE == "on") ? "checked='checked'" : "" ;
       //print_rr($this);
 
       $attr = self::renderAttributes($this->html, $enqoute);
-
-      if($this->Comment != "")
-         $this->HTML = "<div class='item_$this->ID'><input type='checkbox' $attr $checked/> $this->Comment</div>";
-      else
-         $this->HTML = "<div class='item_$this->ID'><input type='checkbox' $attr $checked/></div>";
+      $this->HTML = "<div class='item_$this->ID'><input type='checkbox' $attr $checked/>$this->Comment</div>";
    }
 
 }//eoNCbC
@@ -527,9 +531,9 @@ class ZoriRadioControl extends ZoriControl2
       $attr = self::renderAttributes($this->html, $enqoute);
 
       if($this->Comment != "")
-         $this->HTML = "<div class='item_$this->ID'><input type='checkbox' $attr $checked/> $this->Comment</div>";
+         $this->HTML = "<div class='item_$this->ID'><input type='radio' $attr $checked/> $this->Comment</div>";
       else
-         $this->HTML = "<div class='item_$this->ID'><input type='checkbox' $attr $checked/></div>";
+         $this->HTML = "<div class='item_$this->ID'><input type='radio' $attr $checked/></div>";
    }
 
 }//eoNRaC
@@ -831,7 +835,9 @@ class ZoriSelectControl extends ZoriControl2
             //print_rr($Options);
             foreach($Options as $idx => $html)
             {//print_rr($html); vd($Options[$idx]->innerHTML);
-               if($html->value == null || $html->value == "") $html->value = $idx;
+               //if($html->value == null || $html->value == "") $html->value = $idx;//20170718 removed. Gael
+               if($html->value == 0) $Options[0]->value = "";
+               if($html->value == null || $html->value == "") $this->html->placeholder = $Options[0]->innerHTML;
                //echo "$this->VALUE == $html->value"; vd(($this->VALUE == $html->value));// trip = because
                //print_rr($this->html->placeholder);die("io");
                // $this->html->placeholder = ($this->isRequired == 1) ? "- Select -" : "None" ;
@@ -868,7 +874,7 @@ class ZoriSelectControl extends ZoriControl2
          $(document).ready(function() {
             $('#$this->ID').select2({
                placeholder: '".$this->html->placeholder."',
-               allowClear: ".$this->html->allowClear."
+               allowClear: ".$this->html->allowClear.",
             });
             $jsAdd
          });
@@ -949,13 +955,13 @@ class ZoriDatalistControl extends ZoriSelectControl //>> extends ZoriControl2
 
 class ZoriSelectMultipleControl extends ZoriSelectControl
 {
-   // public function __construct($proto){
-   //    foreach($proto as $key => &$value){
-   //       //vd($key); vd($value);
-   //       $this->{$key} = $value;
-   //    }
-   //    //print_rr($this);
-   // }
+   public function __construct($proto){
+      foreach($proto as $key => &$value){
+         //vd($key); vd($value);
+         $this->{$key} = $value;
+      }
+      //print_rr($this);
+   }
 
    public function render()
    {//print_rr($this);
@@ -968,6 +974,8 @@ class ZoriSelectMultipleControl extends ZoriSelectControl
       if($this->html->allowClear==""){$this->html->allowClear="true";}
       if($this->html->maximumSelectionLength ==""){$this->html->maximumSelectionLength="3";}
 
+      $phpValue = explode(";", $this->VALUE);
+      $jsValue = json_encode($phpValue);
       $js = "
       <script>
          $(document).ready(function() {
@@ -977,6 +985,7 @@ class ZoriSelectMultipleControl extends ZoriSelectControl
                placeholder: '".$this->html->placeholder."',
                allowClear: ".$this->html->allowClear."
             });
+            $('#$this->ID').val($jsValue).trigger('change');
          });
       </script>";
       if($this->Comment != "")
@@ -991,10 +1000,9 @@ class ZoriSelectMultipleControl extends ZoriSelectControl
          </div>".$js;
       }
       else{
-         $this->HTML = "<div class='item_$this->ID'><select $attr >".$this->html->innerHTML."</select></div>".$js;
+         $this->HTML = "<div class='item_$this->ID'><select $attr multiple>".$this->html->innerHTML."</select></div>".$js;
       }
    }
-
 }//eoNSelMulC
 
 

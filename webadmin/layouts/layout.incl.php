@@ -44,55 +44,42 @@ echo "
          <div class='main_container'>
             <div class='col-md-3 left_col'> 
                <div class='left_col scroll-view'>                
-				<!-- logo section -->
-                  <div class='navbar nav_title' style='border: 0;'> <a href='index.html' class='site_title'><i class='fa fa-paw'></i> 
-                  <span>".$this->getBrand()."</span></a> </div> 
+						<!-- logo section -->
+                  <div class='navbar nav_title' style='border: 0;'><a href='index.php' class='site_title'><i class='fa fa-paw'></i> 
+                  <span>".$this->getBrand()."</span></a></div> 
                   <div class='clearfix'></div>
 
-				<!-- menu profile quick info -->
+						<!-- menu profile quick info -->
                   <div class='profile clearfix'>
-                     " . $this->MenuProfileInfo() . " 
+                     ".$this->MenuProfileInfo()." 
                   </div> 
                   <br />
 
-				<!-- sidebar menu -->
+						<!-- sidebar menu -->
                   <div id='sidebar-menu' class='main_menu_side hidden-print main_menu'> ". $this->getMenu() ." </div>
- 
-				<!-- sidebar footer buttons -->             
-                  <!-- <div class='sidebar-footer hidden-small'>
-                  <a data-toggle='tooltip' data-placement='top' title='Settings'> <span class='glyphicon glyphicon-cog' aria-hidden='true'></span> </a>
-                  <a data-toggle='tooltip' data-placement='top' title='FullScreen'> <span class='glyphicon glyphicon-fullscreen' aria-hidden='true'></span> </a>
-                  <a data-toggle='tooltip' data-placement='top' title='Lock'> <span class='glyphicon glyphicon-eye-close' aria-hidden='true'></span> </a>
-                  <a data-toggle='tooltip' data-placement='top' title='Logout'> <span class='glyphicon glyphicon-off' aria-hidden='true'></span> </a>
-                  </div> -->
                </div> 
             </div> 
 
-			<!-- top header bar -->
+				<!-- top header bar -->
             <div class='top_nav' style=''> ". $this->getHeader() ." </div>
-
-			<!-- message section -->
             <div class='right_col' role='main' style=''>
-               <form name='frmNemo' enctype='multipart/form-data' action='". $this->SystemSettings[FULL_PATH] ."' method='post' novalidate> 
-                  <div class=''> 
+               <form name='frmZori' enctype='multipart/form-data' action='". $this->SystemSettings[FULL_PATH] ."' method='post' novalidate>  
+               	<!-- message section -->  
+		            <div id='messageDiv' style='margin-left:-20px;'>".$this->getMessage()."</div>
+		            <div class='' role='alert' id='messageID' style='display:none; margin-left:-20px;'>
+		                <button type='button' class='close' data-dismiss='alert' aria-label='Close' style='position:relative; float:right; width: 40px;'><span aria-hidden='true'>×</span>
+		                </button>
+		            </div>
+		            <!-- toolbar section -->
+            		".$this->ToolBar()."
+            		<div class='clearfix'></div> 
 
-				<!-- Toolbar Section -------------->         
-	            <div id='messageDiv' style='margin-left:-20px;'>".$this->getMessage()."</div>
-	            <div class='' role='alert' id='messageID' style='display:none; margin-left:-20px;'>
-	                <button type='button' class='close' data-dismiss='alert' aria-label='Close' style='position:relative; float:right; width: 40px;'><span aria-hidden='true'>×</span>
-	                </button>
-	                <strong></strong>
-	            </div>
-	            ".$this->ToolBar()."
-	            <div class='clearfix'></div> 
-
-				<!-- site content area -->
-                     <div class='row'> ".$this->ContentBox()." </div>
-                  </div>
+						<!-- site content area -->
+                  <div class='row'> ".$this->ContentBox()." </div>
                </form>
             </div>
 
-			<!-- footer section -->
+				<!-- footer section -->
             <footer class='clearfix footer_fixed'>
                <div class='pull-left'><p style='margin:8px 0px 0px 0px;'>©2016 All Rights Reserved | Silicon Overdrive | Privacy and Terms</p></div>
                <div class='pull-right'> <img src='images/siliconLogo.png' height='35px;' />  </div>

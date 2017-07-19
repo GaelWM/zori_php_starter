@@ -37,7 +37,7 @@
         break;
       default:
 	    $page = new SecurityGroup(array("SecurityGroupID"));
-	    $page->ContentBootstrap[0]["col-md-10"] = $page->getList($SecurityGroupID);
+	    $page->ContentBootstrap[0]["col-md-14"] = $page->getList($SecurityGroupID);
    }
 
    $page->Display();

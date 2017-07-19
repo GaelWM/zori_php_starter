@@ -41,7 +41,7 @@
          $page->ToolBar->Buttons["btnNew"]->Control->value = "Create Views";
          $page->ToolBar->Buttons["btnNew"]->blnShow = 1;
 
-         $page->ContentBootstrap[0]["col-md-10"] = $securitygroup->getList();
+         $page->ContentBootstrap[0]["col-md-14"] = $securitygroup->getList();
    }
    $page->Message->Text = $Message;
    $page->Display();

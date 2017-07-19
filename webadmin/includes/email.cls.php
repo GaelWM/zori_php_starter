@@ -154,18 +154,17 @@ class Email extends ZoriList
       $rowEmail = $xdb->getRowSQL("SELECT * FROM tblEmail WHERE EmailID = ". $xdb->qs($EmailID));
       if($rowEmail->strCC != "")
          $strCC = "
-         <span class='textGraphite'>CC:</span> ". htmlentities($rowEmail->strCC) ."$BR";
+         <span>CC:</span> ". htmlentities($rowEmail->strCC) ."$BR";
 
       $strEmailHeader = "
-         <span class='textHeading textColour' style='width: 100%;'>$rowEmail->strSubject</span>
+         <span style='width: 100%;'></span>
          $BR
-         $BR
-         <span class='textGraphite' style='width: 100%;' >From:</span> ". htmlentities($rowEmail->strFrom) ."$BR
-         <span class='textGraphite' style='width: 100%;' >To:</span> ". htmlentities($rowEmail->strTo) ."$BR
+         <span>From:</span> ". htmlentities($rowEmail->strFrom) ."$BR
+         <span>To:</span> ". htmlentities($rowEmail->strTo) ."$BR
          $strCC
-         <span class='textGraphite' style='width: 100%;' >Date:</span> $rowEmail->dtEmail$BR
-         <span class='textGraphite' style='width: 100%;' >Status:</span> $rowEmail->strStatus$BR
-         $BR";
+         <span>Date:</span> $rowEmail->dtEmail$BR
+         <span>Status:</span> $rowEmail->strStatus$BR
+         <hr />";
       $strEmailBody = $rowEmail->txtBody;
 
       //replacing using regex between two words: http://stackoverflow.com/questions/30407850/deleting-text-between-two-strings-in-php-using-preg-replace
@@ -176,14 +175,30 @@ class Email extends ZoriList
       $strEmailBody = preg_replace('/--==Multipart_Boundary_x[\s\S]+.*/', '', $strEmailBody); //dont use ? to limit it as we want the regex to be greedy
 
       return "
-      <div xstyle='background: none; width: inherit; height: inherit !important;' class='blokkie' >
-         <p style='$ifEmailFoundStyle'>
-            $strEmailHeader
-            $strEmailBody
-         </p>
+      <div class='x_title'>
+         <h2>$rowEmail->strSubject</h2>
+         <ul class='nav navbar-right panel_toolbox'>
+            <li><a class='collapse-link'><i class='fa fa-chevron-up'></i></a> </li>
+            <li class='dropdown'>
+               <a href='#' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'><i class='fa fa-wrench'></i></a>
+               <ul class='dropdown-menu' role='menu'>
+                  <li><a href='#'>Settings 1</a> </li>
+                  <li><a href='#'>Settings 2</a> </li>
+               </ul>
+            </li>
+            <li><a class='close-link'><i class='fa fa-close'></i></a> </li>
+         </ul>
+         <div class='clearfix'></div>
+      </div>
+      <div class='x_content'>
+         <div id='divPreview' style='padding-left: 10px; padding-right: 10px;'>
+            <p>
+               $strEmailHeader
+               $strEmailBody
+            </p>
+         </div>
       </div>
       ";
-
    }
 
    public static function getResendControls($strTo)
@@ -192,9 +207,13 @@ class Email extends ZoriList
 
       return "$BR
       <div class='blokkie'>
-         <p >
-            Resend this email to: <input type=text name=strResendTo id=strResendTo value=\"$strTo\" class='controlText controlWide'/>
-            $SP$SP<input type=submit name=Action value='Resend' class='btn controlButton'/>
+         <p>
+            Resend this email to: <input type=text name=strResendTo id=strResendTo value=\"$strTo\" class='form-control'/>
+            <div style='position:relative;'>
+               <div style='position:absolute; color:#fff; top:10px; left:10px;' class='fa fa-refresh'></div>
+             <input class='linkbutton btn btn-primary' style='padding:6px 12px 6px 30px;' type=submit name=Action value='Resend'</input> 
+           </div>
+         
          </p>
       </div>
       ";
@@ -245,33 +264,32 @@ class Email extends ZoriList
 
    }
 
+   //20170306 - updated attachments to use ; instead of ,
    public static function renderAttachments($strAttachments)
    {
       global $xdb, $SystemSettings, $DT, $SP, $TR, $BR, $HR;
 
-      $arrAttachment = explode(",", $strAttachments);
+      $arrAttachment = explode(";", $strAttachments);
       if(is_array($arrAttachment)){
       foreach($arrAttachment as $strAttachment)
       {
          $Output .= "<a href=\"".$SystemSettings[InvoicePdfDirAdmin]."$strAttachment\" target=_blank >$strAttachment</a>$SP$SP"; //<a href=\"?Action=RemoveAttachment&EmailID=$EmailID&strAttachment=$strAttachment\" onclick='' style=''>- Remove -</a>";
          $br = $BR;
-      }
-      }
-
+      }}
       return $Output;
-
    }
 
+   //20170306 - updated attachments to use ; instead of ,
    public static function RemoveAttachment($EmailID, $strAttachment)
    {
       global $xdb, $SystemSettings, $DT, $SP, $TR, $BR, $HR;
 
       $row = $xdb->getRowSQL("SELECT * FROM tblEmail WHERE EmailID = ". $xdb->qs($EmailID));
-      $arrAttachment = array_flip(explode(",", $row->arrAttachments));
+      $arrAttachment = array_flip(explode(";", $row->arrAttachments));
       unset($arrAttachment[$strAttachment]);
       //print_rr($arrAttachment);
 
-      $strAttachments = implode(",", array_flip($arrAttachment));
+      $strAttachments = implode(";", array_flip($arrAttachment));
       $xdb->doQuery("UPDATE tblEmail SET arrAttachments = ". $xdb->qs($strAttachments) ." WHERE EmailID = ". $xdb->qs($EmailID));
 
       return "Attachment Removed. ";

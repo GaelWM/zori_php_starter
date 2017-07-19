@@ -76,26 +76,18 @@
             $rowEmail = $xdb->getRowSQL("SELECT Max(EmailID) as EmailID FROM tblEmail WHERE refEmailTemplateID = $EmailTemplateID ",0);
             if($rowEmail)
             {
-                 $preview = "                    
-                    <table width='100%' cellspacing='1' cellpadding='2' border='0'>
-                           <caption>Last Email of this type</caption>
-                     </table>
-                     <div class='divPreview'>". Email::Preview($rowEmail->EmailID)  ."</div>";            
+               $preview = "<div class='divPreview'>". Email::Preview($rowEmail->EmailID)  ."</div>";            
             }        
 
             if($page->Security->blnSpecial == 1)
                $page->ToolBar->Buttons[btnNew2]->blnShow = 1;
+
             $page->ToolBar->Buttons[btnNew2]->Control->value = "New Email";
          }
 
          $page->renderControls();
-         $page->ContentBootstrap[0]["col-md-6 col-xs-12"] = $page->renderForm($page->ToolBar->Label)
-            . $page->getJsZoriValidateSave()
-            . js("
-
-               ");
-
-         $page->ContentBootstrap[1]["col-md-4 col-xs-12"] .= $preview;
+         $page->ContentBootstrap[1]["col-md-6 col-xs-12"] = $page->renderTabs($page->ToolBar->Label)."</div>".$page->getJsZoriValidateSave();
+         $page->ContentBootstrap[2]["col-md-6 col-xs-6"] = $preview;
          break;
       case "Export":
          /*header("Content-type: application/ms-excel");
@@ -104,7 +96,7 @@
          echo $page->getList();
          die;*/
          $page = new EmailTemplate("");
-         $page->Content = $page->getList();
+         $page->CONTENT = $page->getList();
          $page->renderExcel($page->Entity->Name);
          die;
          break;

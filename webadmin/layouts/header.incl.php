@@ -144,6 +144,7 @@ echo "
 
       <!-- default -->
       <link href='css/default.css' rel='stylesheet'>
+      <link rel='stylesheet' type='text/css' href='//fonts.googleapis.com/css?family=Pacifico' />
 
       <!-- ALWAYS LAST ############################################################################################## -->
       <!-- Custom Theme Style ------------------------------------------------------------------------------------------------------->
