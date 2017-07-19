@@ -1,4 +1,8 @@
 <?php
+//20160815 - added renderExcel
+//20170124 - add new and delete buttons if list is a sub list
+//20170526 - take out the customHTML parameter in renderTable function -- Gael
+
 include_once("_framework/_zori.list.basic.cls.php");
 
 class ZoriList extends ZoriListBasic
@@ -11,13 +15,11 @@ class ZoriList extends ZoriListBasic
    public $sql;
    public $sql2;
    public $DataKey = array();
-   */
 
+   */
    private $srtArg;
    public $isSortable = 1;
    public $isPageable = 0;
-
-
 
    //extends list basic, adding chks, # numbers, etc
    public function __construct($DataKey)
@@ -94,7 +96,7 @@ class ZoriList extends ZoriListBasic
       if($path == "")
       {
          $path = $this->SystemSettings[FULL_PATH];
-      }
+      }//echo $sql; vd($this->DataKey);
       if(isset($this->DataKey)){
          $this->eval = "\$column->html->onclick = \"window.location='$path?Action=$action&\$evalkey'\";";
       }
@@ -105,7 +107,35 @@ class ZoriList extends ZoriListBasic
       return parent::renderList($this->srtArg);
    }
 
-   public function renderTable($strCaption="", $tableHTML=null, $export=1, $subList = 0, $customHTML=null)
+//delete
+
+   // public function renderTable($strCaption="", $tableHTML=null)
+   // {
+   //    global $BR;
+
+   //    $strList = $this->renderList();
+
+   //    $htmlAttr = ZoriControl::renderAttributes($tableHTML);
+   //    if($strCaption != "")
+   //       $strCaption = "<caption>$strCaption</caption>";
+
+   //    if($this->isPageable == 1 && $this->SystemSettings["PageSize"] > 0)
+   //    {
+   //       $Pager = $this->renderPager();
+   //    }
+   //    return "
+   //    <table class='tblZoriList' border='0' cellpadding='3' cellspacing='0' width='100%' $htmlAttr>
+   //       $strCaption
+   //       $strList
+   //       $Pager
+   //    </table>
+   //    ";
+   //    // I REMOVED THE BREAK TO DECREASE SPACING - JACQUES - 20130923
+   // }
+
+   ## NEW RENDERTABLE FUNCTION TO WORK WITH Zori 3 ############################################################ 12 JANUARY 2017 ## JACQUES
+   //20170526 - take out the customHTML parameter in renderTable function -- Gael
+   public function renderTable($strCaption="", $tableHTML=null, $export=1, $subList = 0)
    {
       global $BR;
 
@@ -183,7 +213,6 @@ class ZoriList extends ZoriListBasic
                   </table>
                </div>
                $Pager
-               $customHTML
             </div><div class='clearfix'></div> ";
    }
 
@@ -362,7 +391,6 @@ class ZoriList extends ZoriListBasic
       }
 
    }
-
 
 }
 

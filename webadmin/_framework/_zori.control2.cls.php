@@ -836,7 +836,7 @@ class ZoriSelectControl extends ZoriControl2
             foreach($Options as $idx => $html)
             {//print_rr($html); vd($Options[$idx]->innerHTML);
                //if($html->value == null || $html->value == "") $html->value = $idx;//20170718 removed. Gael
-               if($html->value == 0) $Options[0]->value = "";
+               if($html->value == 0 || $html->value == -1) $Options[0]->value = "";
                if($html->value == null || $html->value == "") $this->html->placeholder = $Options[0]->innerHTML;
                //echo "$this->VALUE == $html->value"; vd(($this->VALUE == $html->value));// trip = because
                //print_rr($this->html->placeholder);die("io");

@@ -1,8 +1,12 @@
 <?php
+//include_once("_Zori.basic.cls.php");
 /*
- * 20170626: Revamp zori - gael
+ * 20110621 - refined anchor tag click 
+ * 20110621 - added field-type data-transforms
+ * 20140205 - add ->Data[$i][html] in order to render attributes in the data TR on renderList() 
+  *20160511 - Inspect Column type and set list's styling based on that (much like in Zori.database) 
  */
-include_once("systems.php");
+
 include_once("_framework/_zori.cls.php");
 
 class ZoriListBasic extends Zori
@@ -12,9 +16,9 @@ class ZoriListBasic extends Zori
    public $sql;
    public $sql2;
 
-   public $isSortable = 0;
+   public $isSortable = 1;
    public $isSelectable = 1;
-   public $isPageable = 0;
+   public $isPageable = 1;
 
    public $intRecords = 0;
 
@@ -22,7 +26,8 @@ class ZoriListBasic extends Zori
    public $eval = "";
 
    private $arrEvalTinyint = array(0 => "No", 1 => "Yes");
-   
+
+   //ok, all this class should do is pick up the sql statement and generate a data array and make a list view of it. no security-able interaction!
    public function __construct()
    {
       parent::__construct();
@@ -165,7 +170,6 @@ class ZoriListBasic extends Zori
       //$this->isSortable = 1;
    }
 
-
    public function ListDATA($arrData=null)
    {
       if($arrData != null)
@@ -269,8 +273,8 @@ class ZoriListBasic extends Zori
          foreach($this->Columns as $idxCol => $column)
          {
 //print_rr($column);
-            if($this->eval != "") eval($this->eval); // used in NemoList
-            if($column->eval != "") eval($column->eval); // used in NemoList
+            if($this->eval != "") eval($this->eval); // used in ZoriList
+            if($column->eval != "") eval($column->eval); // used in ZoriList
             //print_rr($column);die;
             $htmlAttr = ZoriControl::renderAttributes($column->html);
             $strList .= "<td $htmlAttr >". $row[$idxCol] ."</td>";
@@ -288,7 +292,6 @@ class ZoriListBasic extends Zori
       return $strList;
    }
 
-
    public function renderTable($strCaption="", $tableHTML=null)
    {
       global $BR;
@@ -300,7 +303,7 @@ class ZoriListBasic extends Zori
          $strCaption = "<caption>$strCaption</caption>";
 
       return "
-      <table class='table table-xs table-responsive' $htmlAttr>
+      <table border='0' cellpadding='2' cellspacing='1' width='100%' $htmlAttr>
          $strCaption
          $strList
       </table>

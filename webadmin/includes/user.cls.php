@@ -12,20 +12,17 @@ class User extends ZoriList
    {
       $this->Filters[frSearch]->Type = "varchar";
       $this->Filters[frSearch]->VALUE = "";
-      $this->Filters[frSearch]->Control->html->class = "form-control input-sm";
-
-      //print_rr($this->Filters);
-
+      $this->Filters[frSearch]->html->placeholder = "User ID, User, Email";
+      $this->Filters[frSearch]->html->title = "Search on:User ID, User, Email";
 
       $this->Filters[frStatus]->Type = "select";
-      $this->Filters[frStatus]->VALUE = "-1";
+      $this->Filters[frStatus]->VALUE = -1;
       $this->Filters[frStatus]->Control->html->class = "form-control input-sm";
       $this->Filters[frStatus]->sql = "SELECT -1 AS ControlValue, '- All -' AS ControlText
-                        UNION ALL
+                           UNION ALL
                         SELECT 1 AS ControlValue, 'Active' AS ControlText
-                        UNION ALL
+                           UNION ALL
                         SELECT 0 AS ControlValue, 'Inactive' AS ControlText
-
                         ORDER BY ControlText ASC";
 
       parent::__construct($DataKey);
@@ -65,7 +62,6 @@ class User extends ZoriList
 
       $db->SetValues($_POST);
       $db->Fields[strPasswordMD5] = md5($_POST[strPassword]);
-
       $db->Fields[strLastUser] = $_SESSION['USER']->USERNAME;
 
       //print_rr($db->Fields);die("dfuihu");

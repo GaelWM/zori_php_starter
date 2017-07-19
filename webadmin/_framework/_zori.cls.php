@@ -95,11 +95,9 @@
             $lblProfile = " Profile";
          }
 
-
          if(isset($_SESSION[USER]->ID))
          {
-           $row = $xdb->getRowSQL("SELECT `Profile:PicturePath` AS ProfilePicture, strUser FROM sysUser 
-            WHERE UserID =".$_SESSION[USER]->ID, 0);
+           $row = $xdb->getRowSQL("SELECT `Profile:PicturePath` AS ProfilePicture, strUser FROM sysUser WHERE UserID =".$_SESSION[USER]->ID, 0); 
            $profilePicture = ($row->ProfilePicture == "" ? "blank.jpg" : $row->ProfilePicture);
            $userName = $row->strUser;
          }

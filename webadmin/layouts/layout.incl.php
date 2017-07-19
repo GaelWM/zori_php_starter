@@ -77,8 +77,8 @@ echo "
 
 				<!-- footer section -->
             <footer class='clearfix footer_fixed'>
-               <div class='pull-left'><p style='margin:8px 0px 0px 0px;'>©2016 All Rights Reserved | Silicon Overdrive | Privacy and Terms</p></div>
-               <div class='pull-right'> <img src='images/siliconLogo.png' height='35px;' />  </div>
+               <div class='pull-left'><p style='margin:8px 0px 0px 0px;'>©2017 All Rights Reserved | Zori Corporation | Privacy and Terms</p></div>
+               <div class='pull-right'> <img src='images/zori_pic.png' height='35px;' />  </div>
                <div class='clearfix'></div>
             </footer>
          </div>
